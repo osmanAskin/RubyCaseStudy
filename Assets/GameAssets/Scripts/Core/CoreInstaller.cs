@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CoreInstaller : MonoBehaviour
 {
-    private GameStateMachine _stateMachine;
+    //private GameStateMachine _stateMachine;
 
     private void Awake()
     {
