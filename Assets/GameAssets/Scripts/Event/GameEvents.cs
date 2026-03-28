@@ -22,15 +22,4 @@ public static class GameEvents
     public static void LevelCompleted(int levelIndex) => OnLevelCompleted?.Invoke(levelIndex);
     public static void LevelRestart(int levelIndex) => OnLevelRestart?.Invoke(levelIndex);
     public static void LevelEndRequested(bool isWin) => OnLevelEndRequested?.Invoke(isWin);
-
-    public static void ClearAll()
-    {
-        OnRestart = null;
-        OnLevelSetupRequested = null;
-        OnLevelStart = null;
-        OnLevelEnd = null;
-        OnLevelCompleted = null;
-        OnLevelRestart = null;
-        OnLevelEndRequested = null;
-    }
 }

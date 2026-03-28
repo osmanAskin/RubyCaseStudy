@@ -485,7 +485,6 @@ GameObject:
   - component: {fileID: 1812555496}
   - component: {fileID: 1812555495}
   - component: {fileID: 1812555494}
-  - component: {fileID: 1812555493}
   - component: {fileID: 1812555492}
   - component: {fileID: 1812555491}
   - component: {fileID: 1812555490}
@@ -529,7 +528,6 @@ MonoBehaviour:
   levelManager: {fileID: 1812555496}
   shooterManager: {fileID: 1812555495}
   fxManager: {fileID: 1812555494}
-  settingsManager: {fileID: 1812555493}
   inputManager: {fileID: 1812555492}
   gameInputController: {fileID: 1812555491}
   uiManager: {fileID: 404159339}
@@ -597,18 +595,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e400379ecf0446f591621d088bbb6b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1812555493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1812555485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e303b9fe5d92a4dbfa18ee2967271605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1812555494

@@ -70,7 +70,7 @@ public class ColorCube : MonoBehaviour, INodeObject, IPoolObject
             {
                 gameObject.SetActive(false);
                 shooterManager.ColorCubeBlasted();
-            });
+            }).SetLink(gameObject, LinkBehaviour.KillOnDisable);
     }
 
     public void Reset()
