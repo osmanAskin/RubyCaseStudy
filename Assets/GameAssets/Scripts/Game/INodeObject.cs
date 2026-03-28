@@ -1,4 +1,7 @@
-public interface INodeObject
+namespace RubyCase.Game
 {
-    void Initialize(Node node);
+    public interface INodeObject
+    {
+        void Initialize(Node node);
+    }
 }

@@ -1,5 +1,8 @@
-public static class Constants
+namespace RubyCase.Game
 {
-    // Save / Data keys
-    public const string GameDataKey = "GAME_DATA_KEY";
+    public static class Constants
+    {
+        // Save / Data keys
+        public const string GameDataKey = "GAME_DATA_KEY";
+    }
 }

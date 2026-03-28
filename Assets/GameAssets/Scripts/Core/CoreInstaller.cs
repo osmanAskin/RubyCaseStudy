@@ -1,52 +1,64 @@
 using UnityEngine;
+using RubyCase.Data;
+using RubyCase.Event;
+using RubyCase.Game;
+using RubyCase.Level;
+using RubyCase.Managers;
+using RubyCase.Pools;
+using RubyCase.SaveSystem;
+using RubyCase.StateMachine;
+using RubyCase.UI;
 
-[DefaultExecutionOrder(-100)]
-public class CoreInstaller : MonoBehaviour
+namespace RubyCase.Core
 {
-    [Header("Managers")]
-    [SerializeField] private GameManager gameManager;
-    [SerializeField] private LevelManager levelManager;
-    [SerializeField] private CollectableBoxManager collectableBoxManager;
-    [SerializeField] private InputManager inputManager;
-    [SerializeField] private GameInputController gameInputController;
-    [SerializeField] private UIManager uiManager;
-
-    [Header("State Machines")]
-    [SerializeField] private MainStateMachine mainStateMachine;
-    [SerializeField] private UIStateMachine uiStateMachine;
-
-    [Header("Save & Data")]
-    [SerializeField] private DataManager dataManager;
-
-    [Header("Settings (ScriptableObjects)")]
-    [SerializeField] private GameSettings gameSettings;
-
-    [Header("Prefabs & Pools")]
-    [SerializeField] private ObjectPool objectPool;
-    [SerializeField] private GameObject levelPrefab;
-
-    private void Awake()
+    [DefaultExecutionOrder(-100)]
+    public class CoreInstaller : MonoBehaviour
     {
-        Install();
-    }
+        [Header("Managers")]
+        [SerializeField] private GameManager gameManager;
+        [SerializeField] private LevelManager levelManager;
+        [SerializeField] private CollectableBoxManager collectableBoxManager;
+        [SerializeField] private InputManager inputManager;
+        [SerializeField] private GameInputController gameInputController;
+        [SerializeField] private UIManager uiManager;
 
-    private void Install()
-    {
-        dataManager.Inject(new JsonSaveSystem());
-        levelManager.Inject(dataManager, gameSettings, levelPrefab, objectPool);
-        collectableBoxManager.Inject(levelManager, gameSettings);
-        gameInputController.Inject(inputManager, collectableBoxManager);
-        uiStateMachine.Inject(uiManager, gameSettings);
-        uiManager.Inject(levelManager, gameSettings);
-        gameManager.Inject(mainStateMachine, uiStateMachine, levelManager, collectableBoxManager);
-    }
+        [Header("State Machines")]
+        [SerializeField] private MainStateMachine mainStateMachine;
+        [SerializeField] private UIStateMachine uiStateMachine;
 
-    private void Start()
-    {
-        dataManager.Initialize();
-        levelManager.Initialize();
-        mainStateMachine.Initialize();
-        uiStateMachine.Initialize();
-        gameManager.Initialize();
+        [Header("Save & Data")]
+        [SerializeField] private DataManager dataManager;
+
+        [Header("Settings (ScriptableObjects)")]
+        [SerializeField] private GameSettings gameSettings;
+
+        [Header("Prefabs & Pools")]
+        [SerializeField] private ObjectPool objectPool;
+        [SerializeField] private GameObject levelPrefab;
+
+        private void Awake()
+        {
+            Install();
+        }
+
+        private void Install()
+        {
+            dataManager.Inject(new JsonSaveSystem());
+            levelManager.Inject(dataManager, gameSettings, levelPrefab, objectPool);
+            collectableBoxManager.Inject(levelManager, gameSettings);
+            gameInputController.Inject(inputManager, collectableBoxManager);
+            uiStateMachine.Inject(uiManager, gameSettings);
+            uiManager.Inject(levelManager, gameSettings);
+            gameManager.Inject(mainStateMachine, uiStateMachine, levelManager, collectableBoxManager);
+        }
+
+        private void Start()
+        {
+            dataManager.Initialize();
+            levelManager.Initialize();
+            mainStateMachine.Initialize();
+            uiStateMachine.Initialize();
+            gameManager.Initialize();
+        }
     }
 }

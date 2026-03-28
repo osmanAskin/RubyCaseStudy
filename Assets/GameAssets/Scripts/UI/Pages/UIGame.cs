@@ -1,26 +1,31 @@
 using TMPro;
 using UnityEngine;
+using RubyCase.Event;
+using RubyCase.Level;
 
-public class UIGame : UIPage
+namespace RubyCase.UI.Pages
 {
-    [SerializeField] private TextMeshProUGUI lblLevel;
-    [SerializeField] private RectTransform rectLevel;
-
-    private LevelManager _levelManager;
-
-    public void Inject(LevelManager levelManager)
+    public class UIGame : UIPage
     {
-        _levelManager = levelManager;
-    }
+        [SerializeField] private TextMeshProUGUI lblLevel;
+        [SerializeField] private RectTransform rectLevel;
 
-    private void OnEnable()
-    {
-        if (_levelManager != null)
-            lblLevel.text = $"Level {_levelManager.CurrentLevelNo + 1}";
-    }
+        private LevelManager _levelManager;
 
-    public void OnTapToRestart()
-    {
-        GameEvents.Restart(true);
+        public void Inject(LevelManager levelManager)
+        {
+            _levelManager = levelManager;
+        }
+
+        private void OnEnable()
+        {
+            if (_levelManager != null)
+                lblLevel.text = $"Level {_levelManager.CurrentLevelNo + 1}";
+        }
+
+        public void OnTapToRestart()
+        {
+            GameEvents.Restart(true);
+        }
     }
 }

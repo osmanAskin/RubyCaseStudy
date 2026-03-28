@@ -1,25 +1,29 @@
 using UnityEngine;
+using RubyCase.Pools;
 
-public class ColorCubeGridSystem : GridSystem
+namespace RubyCase.Game
 {
-    public override void Init(ObjectPool pool, Vector2Int size = default)
+    public class ColorCubeGridSystem : GridSystem
     {
-        gridWidth = size.x;
-        gridHeight = size.y;
-
-        base.Init(pool, size);
-    }
-
-    public bool IsPictureComplete()
-    {
-        for (int x = 0; x < _nodes.GetLength(0); x++)
+        public override void Init(ObjectPool pool, Vector2Int size = default)
         {
-            for (int y = 0; y < _nodes.GetLength(1); y++)
-            {
-                if (_nodes[x, y].IsFull) return false;
-            }
+            gridWidth = size.x;
+            gridHeight = size.y;
+
+            base.Init(pool, size);
         }
 
-        return true;
+        public bool IsPictureComplete()
+        {
+            for (int x = 0; x < _nodes.GetLength(0); x++)
+            {
+                for (int y = 0; y < _nodes.GetLength(1); y++)
+                {
+                    if (_nodes[x, y].IsFull) return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

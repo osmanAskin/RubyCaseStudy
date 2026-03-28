@@ -1,15 +1,18 @@
-public class PlayGameState : BaseState<MainStateMachine.MainState>
+namespace RubyCase.StateMachine
 {
-    public PlayGameState(MainStateMachine.MainState key, MainStateMachine.MainState nextStateKey) : base(key)
+    public class PlayGameState : BaseState<MainStateMachine.MainState>
     {
-        NextStateKey = nextStateKey;
-    }
-    
-    public override void OnEnter()
-    {
-    }
+        public PlayGameState(MainStateMachine.MainState key, MainStateMachine.MainState nextStateKey) : base(key)
+        {
+            NextStateKey = nextStateKey;
+        }
 
-    public override void OnExit()
-    {
+        public override void OnEnter()
+        {
+        }
+
+        public override void OnExit()
+        {
+        }
     }
 }

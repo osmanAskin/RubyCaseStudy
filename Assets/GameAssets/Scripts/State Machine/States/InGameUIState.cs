@@ -1,19 +1,24 @@
-public class InGameUIState : BaseState<UIStateMachine.UIState>
+using RubyCase.UI;
+
+namespace RubyCase.StateMachine
 {
-    private readonly UIManager _uiManager;
-
-    public InGameUIState(UIStateMachine.UIState key, UIStateMachine.UIState nextStateKey, UIManager uiManager) : base(key)
+    public class InGameUIState : BaseState<UIStateMachine.UIState>
     {
-        NextStateKey = nextStateKey;
-        _uiManager = uiManager;
-    }
+        private readonly UIManager _uiManager;
 
-    public override void OnEnter()
-    {
-        _uiManager.ShowGame();
-    }
+        public InGameUIState(UIStateMachine.UIState key, UIStateMachine.UIState nextStateKey, UIManager uiManager) : base(key)
+        {
+            NextStateKey = nextStateKey;
+            _uiManager = uiManager;
+        }
 
-    public override void OnExit()
-    {
+        public override void OnEnter()
+        {
+            _uiManager.ShowGame();
+        }
+
+        public override void OnExit()
+        {
+        }
     }
 }

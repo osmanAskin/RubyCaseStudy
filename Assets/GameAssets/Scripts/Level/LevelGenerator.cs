@@ -1,44 +1,49 @@
 using UnityEngine;
+using RubyCase.Data;
+using RubyCase.Pools;
 
-public class LevelGenerator
+namespace RubyCase.Level
 {
-    private LevelManager _levelManager;
-    private GameObject _levelPrefab;
-    private GameSettings _gameSettings;
-    private ObjectPool _objectPool;
-
-    public LevelGenerator(LevelManager levelManager, GameObject levelPrefab, GameSettings gameSettings,
-        ObjectPool objectPool)
+    public class LevelGenerator
     {
-        _levelManager = levelManager;
-        _levelPrefab = levelPrefab;
-        _gameSettings = gameSettings;
-        _objectPool = objectPool;
-    }
+        private LevelManager _levelManager;
+        private GameObject _levelPrefab;
+        private GameSettings _gameSettings;
+        private ObjectPool _objectPool;
 
-    public Level GenerateLevel(LevelData data)
-    {
-        ResetLevel();
-
-        if (data == null)
+        public LevelGenerator(LevelManager levelManager, GameObject levelPrefab, GameSettings gameSettings,
+            ObjectPool objectPool)
         {
-            Debug.LogError("[LevelGenerator] Level data null! GameSettings.levels array may be empty.");
-            return null;
+            _levelManager = levelManager;
+            _levelPrefab = levelPrefab;
+            _gameSettings = gameSettings;
+            _objectPool = objectPool;
         }
 
-        Level levelInstance = Object.Instantiate(_levelPrefab).GetComponent<Level>();
+        public Level GenerateLevel(LevelData data)
+        {
+            ResetLevel();
 
-        levelInstance.Init(data, _gameSettings, _objectPool);
-        return levelInstance;
-    }
+            if (data == null)
+            {
+                Debug.LogError("[LevelGenerator] Level data null! GameSettings.levels array may be empty.");
+                return null;
+            }
 
-    private void ResetLevel()
-    {
-        Time.timeScale = 1;
-        if (_levelManager.CurrentLevel == null) return;
+            Level levelInstance = Object.Instantiate(_levelPrefab).GetComponent<Level>();
 
-        _levelManager.CurrentLevel.Reset();
+            levelInstance.Init(data, _gameSettings, _objectPool);
+            return levelInstance;
+        }
 
-        Object.Destroy(_levelManager.CurrentLevel.gameObject);
+        private void ResetLevel()
+        {
+            Time.timeScale = 1;
+            if (_levelManager.CurrentLevel == null) return;
+
+            _levelManager.CurrentLevel.Reset();
+
+            Object.Destroy(_levelManager.CurrentLevel.gameObject);
+        }
     }
 }

@@ -1,7 +1,10 @@
 using System;
 
-[Serializable]
-public class GameData
+namespace RubyCase.SaveSystem
 {
-    public int currentLevelNumber;
+    [Serializable]
+    public class GameData
+    {
+        public int currentLevelNumber;
+    }
 }

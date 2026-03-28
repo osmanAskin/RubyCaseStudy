@@ -1,39 +1,42 @@
-using System;
 using Dreamteck.Splines;
 using UnityEngine;
+using RubyCase.Pools;
 
-public class ConveyorArrow : MonoBehaviour, IPoolObject
+namespace RubyCase.Game
 {
-    [SerializeField] private SplineFollower splineFollower;
-
-    public void SetSpline(SplineComputer spline, double percent, float followSpeed)
+    public class ConveyorArrow : MonoBehaviour, IPoolObject
     {
-        splineFollower.spline = spline;
-        splineFollower.RebuildImmediate();
-        splineFollower.follow = true;
-        splineFollower.followSpeed = followSpeed;
-        splineFollower.SetPercent(percent);
-    }
+        [SerializeField] private SplineFollower splineFollower;
 
-    private void Update()
-    {
-        if (!splineFollower.follow) return;
-
-        if (splineFollower.GetPercent() >= 1)
+        public void SetSpline(SplineComputer spline, double percent, float followSpeed)
         {
-            splineFollower.SetPercent(0);
-            splineFollower.Rebuild();
+            splineFollower.spline = spline;
+            splineFollower.RebuildImmediate();
+            splineFollower.follow = true;
+            splineFollower.followSpeed = followSpeed;
+            splineFollower.SetPercent(percent);
         }
-    }
 
-    public void Stop()
-    {
-        splineFollower.follow = false;
-    }
+        private void Update()
+        {
+            if (!splineFollower.follow) return;
 
-    public void Reset()
-    {
-        splineFollower.follow = false;
-        splineFollower.spline = null;
+            if (splineFollower.GetPercent() >= 1)
+            {
+                splineFollower.SetPercent(0);
+                splineFollower.Rebuild();
+            }
+        }
+
+        public void Stop()
+        {
+            splineFollower.follow = false;
+        }
+
+        public void Reset()
+        {
+            splineFollower.follow = false;
+            splineFollower.spline = null;
+        }
     }
 }

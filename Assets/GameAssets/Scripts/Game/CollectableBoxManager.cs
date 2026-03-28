@@ -1,85 +1,91 @@
 using UnityEngine;
+using RubyCase.Data;
+using RubyCase.Event;
+using RubyCase.Level;
 
-public class CollectableBoxManager : MonoBehaviour
+namespace RubyCase.Game
 {
-    private LevelManager _levelManager;
-    private GameSettings _gameSettings;
-
-    public bool OnLastCollectableBoxEffect { get; set; }
-
-    public void Inject(LevelManager levelManager, GameSettings gameSettings)
+    public class CollectableBoxManager : MonoBehaviour
     {
-        _levelManager = levelManager;
-        _gameSettings = gameSettings;
-    }
+        private LevelManager _levelManager;
+        private GameSettings _gameSettings;
 
-    public void CollectableBoxSelected(CollectableBox collectableBox)
-    {
-        var conveyor = _levelManager.CurrentLevel.Conveyor;
-        if (!conveyor.CanGetNewCollectableBox())
+        public bool OnLastCollectableBoxEffect { get; set; }
+
+        public void Inject(LevelManager levelManager, GameSettings gameSettings)
         {
-            conveyor.PlayConveyorIsFullEffect();
-            return;
+            _levelManager = levelManager;
+            _gameSettings = gameSettings;
         }
 
-        conveyor.AddCollectableBox(collectableBox);
-
-        if (collectableBox.CurrentCollectableBoxNode != null)
+        public void CollectableBoxSelected(CollectableBox collectableBox)
         {
-            collectableBox.CurrentCollectableBoxNode.SetEmpty(collectableBox);
-            _levelManager.CurrentLevel.CollectableBoxGridSystem.TransferCollectableBoxes(collectableBox.CurrentCollectableBoxNode.GridPosition.x);
+            var conveyor = _levelManager.CurrentLevel.Conveyor;
+            if (!conveyor.CanGetNewCollectableBox())
+            {
+                conveyor.PlayConveyorIsFullEffect();
+                return;
+            }
+
+            conveyor.AddCollectableBox(collectableBox);
+
+            if (collectableBox.CurrentCollectableBoxNode != null)
+            {
+                collectableBox.CurrentCollectableBoxNode.SetEmpty(collectableBox);
+                _levelManager.CurrentLevel.CollectableBoxGridSystem.TransferCollectableBoxes(collectableBox.CurrentCollectableBoxNode.GridPosition.x);
+            }
+
+            collectableBox.Selected(conveyor.SplineComputer, this, conveyor.GetPlate());
+
+            _levelManager.CurrentLevel.ReservedSlotGridSystem.SetWarningEffect();
+            _levelManager.CurrentLevel.ReservedSlotGridSystem.TransferCollectableBoxes();
         }
 
-        collectableBox.Selected(conveyor.SplineComputer, this, conveyor.GetPlate());
-
-        _levelManager.CurrentLevel.ReservedSlotGridSystem.SetWarningEffect();
-        _levelManager.CurrentLevel.ReservedSlotGridSystem.TransferCollectableBoxes();
-    }
-
-    public void SetReservedSlot(CollectableBox collectableBox)
-    {
-        var reservedSlot = _levelManager.CurrentLevel.GetAvailableReservedSlot();
-        if (reservedSlot == null)
+        public void SetReservedSlot(CollectableBox collectableBox)
         {
-            GameEvents.LevelEndRequested(false);
-            return;
+            var reservedSlot = _levelManager.CurrentLevel.GetAvailableReservedSlot();
+            if (reservedSlot == null)
+            {
+                GameEvents.LevelEndRequested(false);
+                return;
+            }
+
+            collectableBox.SetReservedSlot(reservedSlot);
+            reservedSlot.AssignNodeObject(collectableBox);
+            _levelManager.CurrentLevel.ReservedSlotGridSystem.SetWarningEffect();
         }
 
-        collectableBox.SetReservedSlot(reservedSlot);
-        reservedSlot.AssignNodeObject(collectableBox);
-        _levelManager.CurrentLevel.ReservedSlotGridSystem.SetWarningEffect();
-    }
-
-    public void RemoveCollectableBoxFromConveyor(CollectableBox collectableBox, GameObject plate)
-    {
-        _levelManager.CurrentLevel.Conveyor.RemoveCollectableBox(collectableBox, plate);
-    }
-
-    public void ColorCubeBlasted()
-    {
-        if (_levelManager.CurrentLevel.colorCubeGridSystem.IsPictureComplete())
+        public void RemoveCollectableBoxFromConveyor(CollectableBox collectableBox, GameObject plate)
         {
-            GameEvents.LevelEndRequested(true);
+            _levelManager.CurrentLevel.Conveyor.RemoveCollectableBox(collectableBox, plate);
         }
-    }
 
-    public void ControlLastCollectableBoxes()
-    {
-        if (OnLastCollectableBoxEffect) return;
-
-        var count = _levelManager.CurrentLevel.CollectableBoxGridSystem.GetCurrentCollectableBoxCount();
-        count += _levelManager.CurrentLevel.ReservedSlotGridSystem.GetCurrentCollectableBoxCount();
-        count += _levelManager.CurrentLevel.Conveyor.GetCurrentCollectableBoxCount();
-
-        if (count <= _gameSettings.conveyorCollectableBoxLimit)
+        public void ColorCubeBlasted()
         {
-            OnLastCollectableBoxEffect = true;
-            Time.timeScale = _gameSettings.lastCollectableBoxEffectTimeScale;
+            if (_levelManager.CurrentLevel.colorCubeGridSystem.IsPictureComplete())
+            {
+                GameEvents.LevelEndRequested(true);
+            }
         }
-    }
 
-    public void ResetSystem()
-    {
-        OnLastCollectableBoxEffect = false;
+        public void ControlLastCollectableBoxes()
+        {
+            if (OnLastCollectableBoxEffect) return;
+
+            var count = _levelManager.CurrentLevel.CollectableBoxGridSystem.GetCurrentCollectableBoxCount();
+            count += _levelManager.CurrentLevel.ReservedSlotGridSystem.GetCurrentCollectableBoxCount();
+            count += _levelManager.CurrentLevel.Conveyor.GetCurrentCollectableBoxCount();
+
+            if (count <= _gameSettings.conveyorCollectableBoxLimit)
+            {
+                OnLastCollectableBoxEffect = true;
+                Time.timeScale = _gameSettings.lastCollectableBoxEffectTimeScale;
+            }
+        }
+
+        public void ResetSystem()
+        {
+            OnLastCollectableBoxEffect = false;
+        }
     }
 }

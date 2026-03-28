@@ -1,4 +1,7 @@
-public class ColorCubeNode : Node
+namespace RubyCase.Game
 {
+    public class ColorCubeNode : Node
+    {
 
+    }
 }

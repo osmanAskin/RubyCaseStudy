@@ -1,15 +1,17 @@
 using System;
 
-public abstract class BaseState<EState> where EState : Enum
+namespace RubyCase.StateMachine
 {
-    protected BaseState(EState key)
+    public abstract class BaseState<EState> where EState : Enum
     {
-        StateKey = key;
-    }
-    
-    public EState StateKey { get; private set; }
-    protected EState NextStateKey;
-    public abstract void OnEnter();
-    public abstract void OnExit();
+        protected BaseState(EState key)
+        {
+            StateKey = key;
+        }
 
+        public EState StateKey { get; private set; }
+        protected EState NextStateKey;
+        public abstract void OnEnter();
+        public abstract void OnExit();
+    }
 }

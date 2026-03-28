@@ -1,8 +1,13 @@
-public class UIFail : UIPage
+using RubyCase.Event;
+
+namespace RubyCase.UI.Pages
 {
-    public void OnTapPlayAgain()
+    public class UIFail : UIPage
     {
-        GameEvents.Restart(true);
-        Close();
+        public void OnTapPlayAgain()
+        {
+            GameEvents.Restart(true);
+            Close();
+        }
     }
 }

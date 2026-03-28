@@ -2,28 +2,31 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(CanvasScaler))]
-public class UIPage : MonoBehaviour
+namespace RubyCase.UI.Pages
 {
-    [HideInInspector] public Action OnClose;
-
-    protected virtual void Awake()
+    [RequireComponent(typeof(CanvasScaler))]
+    public class UIPage : MonoBehaviour
     {
-        var canvasScaler = GetComponent<CanvasScaler>();
-        if (canvasScaler != null && (float)Screen.height / Screen.width < 1.6f)
+        [HideInInspector] public Action OnClose;
+
+        protected virtual void Awake()
         {
-            canvasScaler.matchWidthOrHeight = 1f;
+            var canvasScaler = GetComponent<CanvasScaler>();
+            if (canvasScaler != null && (float)Screen.height / Screen.width < 1.6f)
+            {
+                canvasScaler.matchWidthOrHeight = 1f;
+            }
         }
-    }
 
-    public void OnTapClose()
-    {
-        Close();
-    }
+        public void OnTapClose()
+        {
+            Close();
+        }
 
-    public virtual void Close()
-    {
-        OnClose?.Invoke();
-        gameObject.SetActive(false);
+        public virtual void Close()
+        {
+            OnClose?.Invoke();
+            gameObject.SetActive(false);
+        }
     }
 }

@@ -1,15 +1,18 @@
-public class StartUIState : BaseState<UIStateMachine.UIState>
+namespace RubyCase.StateMachine
 {
-    public StartUIState(UIStateMachine.UIState key, UIStateMachine.UIState nextStateKey) : base(key)
+    public class StartUIState : BaseState<UIStateMachine.UIState>
     {
-        NextStateKey = nextStateKey;
-    }
+        public StartUIState(UIStateMachine.UIState key, UIStateMachine.UIState nextStateKey) : base(key)
+        {
+            NextStateKey = nextStateKey;
+        }
 
-    public override void OnEnter()
-    {
-    }
+        public override void OnEnter()
+        {
+        }
 
-    public override void OnExit()
-    {
+        public override void OnExit()
+        {
+        }
     }
 }

@@ -1,48 +1,53 @@
 using System;
 using Cysharp.Threading.Tasks;
+using RubyCase.Data;
+using RubyCase.UI;
 
-public class LevelEndUIState : BaseState<UIStateMachine.UIState>
+namespace RubyCase.StateMachine
 {
-    private bool _isWin;
-    private readonly GameSettings _settings;
-    private readonly UIManager _uiManager;
-
-    public LevelEndUIState(UIStateMachine.UIState key, UIStateMachine.UIState nextStateKey, GameSettings settings, UIManager uiManager) : base(key)
+    public class LevelEndUIState : BaseState<UIStateMachine.UIState>
     {
-        NextStateKey = nextStateKey;
-        _settings = settings;
-        _uiManager = uiManager;
-    }
+        private bool _isWin;
+        private readonly GameSettings _settings;
+        private readonly UIManager _uiManager;
 
-    public override void OnEnter()
-    {
-        if (_isWin)
+        public LevelEndUIState(UIStateMachine.UIState key, UIStateMachine.UIState nextStateKey, GameSettings settings, UIManager uiManager) : base(key)
         {
-            Complete();
+            NextStateKey = nextStateKey;
+            _settings = settings;
+            _uiManager = uiManager;
         }
-        else
+
+        public override void OnEnter()
         {
-            DelayFail(_settings.levelFailedUIDelay);
+            if (_isWin)
+            {
+                Complete();
+            }
+            else
+            {
+                DelayFail(_settings.levelFailedUIDelay);
+            }
         }
-    }
 
-    private async UniTask DelayFail(float delay)
-    {
-        await UniTask.Delay(TimeSpan.FromSeconds(delay));
-        _uiManager.ShowFail();
-    }
+        private async UniTask DelayFail(float delay)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(delay));
+            _uiManager.ShowFail();
+        }
 
-    private void Complete()
-    {
-        _uiManager.ShowCompleted();
-    }
+        private void Complete()
+        {
+            _uiManager.ShowCompleted();
+        }
 
-    public override void OnExit()
-    {
-    }
+        public override void OnExit()
+        {
+        }
 
-    public void SetWin(bool isWin)
-    {
-        _isWin = isWin;
+        public void SetWin(bool isWin)
+        {
+            _isWin = isWin;
+        }
     }
 }

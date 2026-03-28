@@ -1,4 +1,7 @@
-public interface ITickableState
+namespace RubyCase.StateMachine
 {
-    void OnUpdate();
+    public interface ITickableState
+    {
+        void OnUpdate();
+    }
 }

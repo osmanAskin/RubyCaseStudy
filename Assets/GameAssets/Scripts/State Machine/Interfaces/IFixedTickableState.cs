@@ -1,4 +1,7 @@
-public interface IFixedTickableState
+namespace RubyCase.StateMachine
 {
-    void OnFixedUpdate();
+    public interface IFixedTickableState
+    {
+        void OnFixedUpdate();
+    }
 }

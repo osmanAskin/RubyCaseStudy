@@ -1,7 +1,10 @@
-public class CollectableBoxNode : Node
+namespace RubyCase.Game
 {
-    public bool IsFrontNode()
+    public class CollectableBoxNode : Node
     {
-        return GridPosition.y == _gridSystem.gridHeight - 1;
+        public bool IsFrontNode()
+        {
+            return GridPosition.y == _gridSystem.gridHeight - 1;
+        }
     }
 }
