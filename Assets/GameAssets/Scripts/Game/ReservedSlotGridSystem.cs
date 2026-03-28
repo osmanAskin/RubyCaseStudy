@@ -25,7 +25,7 @@ public class ReservedSlotGridSystem : GridSystem
         return null;
     }
 
-    public int GetCurrentShooterCount()
+    public int GetCurrentCollectableBoxCount()
     {
         var count = 0;
         for (int i = 0; i < _nodes.GetLength(0); i++)
@@ -81,7 +81,7 @@ public class ReservedSlotGridSystem : GridSystem
         }
     }
 
-    public void TransferShooters()
+    public void TransferCollectableBoxes()
     {
         for (int i = 1; i < _nodes.GetLength(0); i++)
         {
@@ -96,9 +96,9 @@ public class ReservedSlotGridSystem : GridSystem
 
     public void Transfer(ReservedSlot from, ReservedSlot to)
     {
-        var shooter = from.NodeObject as Shooter;
-        from.SetEmpty(shooter);
-        to.AssignNodeObject(shooter);
-        shooter.SetReservedSlot(to);
+        var collectableBox = from.NodeObject as CollectableBox;
+        from.SetEmpty(collectableBox);
+        to.AssignNodeObject(collectableBox);
+        collectableBox.SetReservedSlot(to);
     }
 }

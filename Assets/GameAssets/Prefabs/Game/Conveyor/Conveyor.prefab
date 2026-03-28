@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spline: {fileID: 2096038724697056363}
-  shooterCountText: {fileID: 6958238593163731972}
+  collectableBoxCountText: {fileID: 6958238593163731972}
   plateStartPosition: {fileID: 1882965677806375470}
 --- !u!1 &2736972102653746990
 GameObject:
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 2932736970835780878}
   - component: {fileID: 6958238593163731972}
   m_Layer: 0
-  m_Name: conveyor shooter count text
+  m_Name: CollectableBoxText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

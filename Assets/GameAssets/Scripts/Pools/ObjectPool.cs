@@ -112,10 +112,10 @@ public enum PoolTags
 {
     None = 0,
     ColorCube = 1,
-    Shooter = 2,
+    CollectableBox = 2,
     ConveyorArrow = 4,
     ReservedSlot = 5,
-    ShooterNode = 6,
+    CollectableBoxNode = 6,
     ColorCubeNode = 7,
     ShooterPlate = 8,
 }

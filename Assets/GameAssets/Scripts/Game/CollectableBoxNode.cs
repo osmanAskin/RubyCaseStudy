@@ -1,4 +1,4 @@
-public class ShooterNode : Node
+public class CollectableBoxNode : Node
 {
     public bool IsFrontNode()
     {

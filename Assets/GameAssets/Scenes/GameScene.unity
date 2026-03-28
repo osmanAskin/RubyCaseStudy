@@ -634,7 +634,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 1812555497}
   levelManager: {fileID: 1812555496}
-  shooterManager: {fileID: 1812555495}
+  collectableBoxManager: {fileID: 1812555495}
   inputManager: {fileID: 1812555492}
   gameInputController: {fileID: 1812555491}
   uiManager: {fileID: 404159339}

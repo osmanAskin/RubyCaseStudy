@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2478230595356984216}
   - component: {fileID: 289848688261796300}
   m_Layer: 0
-  m_Name: Shooter Grid System
+  m_Name: Collectable Box Grid System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

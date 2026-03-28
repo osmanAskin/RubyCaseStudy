@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ShooterGridSystem : GridSystem
+public class CollectableBoxGridSystem : GridSystem
 {
     public override void Init(ObjectPool pool, Vector2Int size = default)
     {
@@ -10,28 +10,28 @@ public class ShooterGridSystem : GridSystem
         base.Init(pool, size);
     }
 
-    public void TransferShooters(int shooterXValue)
+    public void TransferCollectableBoxes(int collectableBoxXValue)
     {
         for (int i = _nodes.GetLength(1) - 2; i >= 0; i--)
         {
-            var from = _nodes[shooterXValue, i];
-            var to = _nodes[shooterXValue, i + 1];
+            var from = _nodes[collectableBoxXValue, i];
+            var to = _nodes[collectableBoxXValue, i + 1];
             if (to.IsFull) continue;
             if (!from.IsFull) continue;
 
-            Transfer(from as ShooterNode, to as ShooterNode);
+            Transfer(from as CollectableBoxNode, to as CollectableBoxNode);
         }
     }
 
-    public void Transfer(ShooterNode from, ShooterNode to)
+    public void Transfer(CollectableBoxNode from, CollectableBoxNode to)
     {
-        var shooter = from.NodeObject as Shooter;
-        from.SetEmpty(shooter);
-        to.AssignNodeObject(shooter);
-        shooter.SetNewNode(to);
+        var collectableBox = from.NodeObject as CollectableBox;
+        from.SetEmpty(collectableBox);
+        to.AssignNodeObject(collectableBox);
+        collectableBox.SetNewNode(to);
     }
 
-    public int GetCurrentShooterCount()
+    public int GetCurrentCollectableBoxCount()
     {
         var count = 0;
         for (int i = 0; i < _nodes.GetLength(0); i++)

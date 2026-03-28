@@ -12,21 +12,21 @@ public class GameSettings : ScriptableObject
     [Space(15)] [TabGroup("General")] [Header("LEVEL SYSTEM")]
     public int randomStartIndex = 3;
 
-    [Space(15)] [TabGroup("General")] [Header("SHOOTER SETTINGS")]
-    public float shooterSpeed = 3;
+    [Space(15)] [TabGroup("General")] [Header("COLLECTABLE BOX SETTINGS")]
+    public float collectableBoxSpeed = 3;
 
-    [TabGroup("General")] public float lastShooterEffectTimeScale = 2f;
-    [Space(10)] [TabGroup("General")] public float shooterSlotToConveyorJumpDuration = 0.5f;
-    [TabGroup("General")] public float shooterSlotToConveyorJumpPower = 1f;
-    [TabGroup("General")] public Ease shooterSlotToConveyorJumpEase = Ease.Linear;
-    [Space(10)] [TabGroup("General")] public float shooterToReservedSlotJumpDuration = 0.5f;
-    [TabGroup("General")] public float shooterToReservedSlotJumpPower = 1f;
-    [TabGroup("General")] public Ease shooterToReservedSlotJumpEase = Ease.Linear;
-    [Space(10)] [TabGroup("General")] public float shooterNodeTransferDuration = 0.3f;
-    [TabGroup("General")] public Ease shooterNodeTransferEase = Ease.Linear;
-    [Space(10)] [TabGroup("General")] public float shooterCompleteEffectZPositionPlusValue = 1f;
-    [TabGroup("General")] public float shooterCompleteEffectDuration = 0.5f;
-    [TabGroup("General")] public Ease shooterCompleteEffectScaleDownEase = Ease.InBack;
+    [TabGroup("General")] public float lastCollectableBoxEffectTimeScale = 2f;
+    [Space(10)] [TabGroup("General")] public float collectableBoxSlotToConveyorJumpDuration = 0.5f;
+    [TabGroup("General")] public float collectableBoxSlotToConveyorJumpPower = 1f;
+    [TabGroup("General")] public Ease collectableBoxSlotToConveyorJumpEase = Ease.Linear;
+    [Space(10)] [TabGroup("General")] public float collectableBoxToReservedSlotJumpDuration = 0.5f;
+    [TabGroup("General")] public float collectableBoxToReservedSlotJumpPower = 1f;
+    [TabGroup("General")] public Ease collectableBoxToReservedSlotJumpEase = Ease.Linear;
+    [Space(10)] [TabGroup("General")] public float collectableBoxNodeTransferDuration = 0.3f;
+    [TabGroup("General")] public Ease collectableBoxNodeTransferEase = Ease.Linear;
+    [Space(10)] [TabGroup("General")] public float collectableBoxCompleteEffectZPositionPlusValue = 1f;
+    [TabGroup("General")] public float collectableBoxCompleteEffectDuration = 0.5f;
+    [TabGroup("General")] public Ease collectableBoxCompleteEffectScaleDownEase = Ease.InBack;
     [Space(15)] [TabGroup("General")] [Header("ABSORB SETTINGS")]
     public float cubeAbsorbDuration = 0.4f;
 
@@ -38,7 +38,7 @@ public class GameSettings : ScriptableObject
     [TabGroup("General")] public float absorbPunchElasticity = 0.5f;
 
     [Space(15)] [TabGroup("General")] [Header("CONVEYOR SETTINGS")]
-    public int conveyorShooterLimit = 5;
+    public int conveyorCollectableBoxLimit = 5;
 
     [TabGroup("General")] public int conveyorArrowCount;
     [TabGroup("General")] public float conveyorArrowSpeed = 5f;
@@ -50,7 +50,7 @@ public class GameSettings : ScriptableObject
     [TabGroup("General")] public int conveyorIsFullEffectTextShakeVibrato = 12;
     [TabGroup("General")] public float conveyorIsFullEffectTextShakeRandomness = 60f;
     [TabGroup("General")] public float conveyorIsFullEffectTextColorFixDuration = 0.2f;
-    [Space(10)] [TabGroup("General")] public float conveyorShooterPlatePositionDistance = 0.1f;
+    [Space(10)] [TabGroup("General")] public float conveyorCollectableBoxPlatePositionDistance = 0.1f;
     [TabGroup("General")] public float plateMoveDuration = 0.3f;
 
     [Space(15)] [TabGroup("General")] [Header("RESERVED SLOT SETTINGS")]

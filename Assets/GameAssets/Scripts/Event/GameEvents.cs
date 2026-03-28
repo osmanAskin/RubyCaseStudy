@@ -12,7 +12,7 @@ public static class GameEvents
     public static event Action<int> OnLevelCompleted;
     public static event Action<int> OnLevelRestart;
 
-    // Internal requests (ShooterManager → GameManager)
+    // Internal requests (CollectableBoxManager → GameManager)
     public static event Action<bool> OnLevelEndRequested;
 
     public static void Restart(bool hard) => OnRestart?.Invoke(hard);

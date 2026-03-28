@@ -8,17 +8,17 @@ public class GameManager : MonoBehaviour
     private MainStateMachine _mainStateMachine;
     private UIStateMachine _uiStateMachine;
     private LevelManager _levelManager;
-    private ShooterManager _shooterManager;
+    private CollectableBoxManager _collectableBoxManager;
 
     private CancellationTokenSource _restartCts;
 
     public void Inject(MainStateMachine mainStateMachine, UIStateMachine uiStateMachine,
-        LevelManager levelManager, ShooterManager shooterManager)
+        LevelManager levelManager, CollectableBoxManager collectableBoxManager)
     {
         _mainStateMachine = mainStateMachine;
         _uiStateMachine = uiStateMachine;
         _levelManager = levelManager;
-        _shooterManager = shooterManager;
+        _collectableBoxManager = collectableBoxManager;
     }
 
     private void OnEnable()
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     private void SetUpLevel()
     {
-        _shooterManager.ResetSystem();
+        _collectableBoxManager.ResetSystem();
         _mainStateMachine.SetStateWithKey(MainStateMachine.MainState.Start);
         _levelManager.SetupLevel();
         _uiStateMachine.SetStateWithKey(UIStateMachine.UIState.InGame);

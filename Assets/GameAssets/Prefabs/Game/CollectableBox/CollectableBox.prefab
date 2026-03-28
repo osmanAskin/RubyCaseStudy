@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 600182426183278221}
   - component: {fileID: 6231850460208604983}
   m_Layer: 6
-  m_Name: Shooter
+  m_Name: CollectableBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 5430119275408433710}
   - component: {fileID: 3731292888902696484}
   m_Layer: 6
-  m_Name: ShootCountText
+  m_Name: CollectableBoxText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 5280433086107566956}
   m_Layer: 6
   m_Name: Cube
-  m_TagString: Shooter
+  m_TagString: CollectableBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

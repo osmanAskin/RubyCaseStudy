@@ -7,68 +7,68 @@ using UnityEngine;
 public class Conveyor : MonoBehaviour
 {
     [SerializeField] private SplineComputer _spline;
-    [SerializeField] private TMP_Text shooterCountText;
+    [SerializeField] private TMP_Text collectableBoxCountText;
     [SerializeField] private Transform plateStartPosition;
 
     private int _conveyorLimit;
-    private List<Shooter> _shootersOnConveyor = new List<Shooter>();
+    private List<CollectableBox> _collectableBoxesOnConveyor = new List<CollectableBox>();
     private ConveyorArrow[] _arrows;
-    private List<GameObject> _shooterPlates;
+    private List<GameObject> _collectableBoxPlates;
     private GameSettings _gameSettings;
-    
+
     public SplineComputer SplineComputer => _spline;
 
     private void Start()
     {
-        SetShooterCountText();
+        SetCollectableBoxCountText();
     }
 
     public void Init(ObjectPool pool, Level level, GameSettings settings)
     {
         _gameSettings = settings;
-        this._conveyorLimit = settings.conveyorShooterLimit;
+        this._conveyorLimit = settings.conveyorCollectableBoxLimit;
         SetArrows(pool, level);
         SetPlates(pool, level);
     }
 
-    public bool CanGetNewShooter()
+    public bool CanGetNewCollectableBox()
     {
-        return _shootersOnConveyor.Count < _conveyorLimit;
+        return _collectableBoxesOnConveyor.Count < _conveyorLimit;
     }
 
-    public void AddShooter(Shooter shooter)
+    public void AddCollectableBox(CollectableBox collectableBox)
     {
-        if (_shootersOnConveyor.Contains(shooter)) return;
+        if (_collectableBoxesOnConveyor.Contains(collectableBox)) return;
 
-        _shootersOnConveyor.Add(shooter);
-        SetShooterCountText();
+        _collectableBoxesOnConveyor.Add(collectableBox);
+        SetCollectableBoxCountText();
     }
 
-    public void RemoveShooter(Shooter shooter, GameObject plate)
+    public void RemoveCollectableBox(CollectableBox collectableBox, GameObject plate)
     {
-        _shootersOnConveyor.Remove(shooter);
-        SetShooterCountText();
+        _collectableBoxesOnConveyor.Remove(collectableBox);
+        SetCollectableBoxCountText();
 
         PutPlate(plate);
     }
 
-    public int GetCurrentShooterCount()
+    public int GetCurrentCollectableBoxCount()
     {
-        return _shootersOnConveyor.Count;
+        return _collectableBoxesOnConveyor.Count;
     }
 
-    private void SetShooterCountText()
+    private void SetCollectableBoxCountText()
     {
-        shooterCountText.text = (_conveyorLimit - _shootersOnConveyor.Count).ToString() + "/" + _conveyorLimit;
+        collectableBoxCountText.text = (_conveyorLimit - _collectableBoxesOnConveyor.Count).ToString() + "/" + _conveyorLimit;
     }
 
     public void PlayConveyorIsFullEffect()
     {
-        shooterCountText.DOComplete();
-        shooterCountText.transform.DOComplete();
-        shooterCountText.DOColor(_gameSettings.conveyorIsFullEffectTextColor,
+        collectableBoxCountText.DOComplete();
+        collectableBoxCountText.transform.DOComplete();
+        collectableBoxCountText.DOColor(_gameSettings.conveyorIsFullEffectTextColor,
             _gameSettings.conveyorIsFullEffectTextColorChangeDuration);
-        shooterCountText.transform.DOShakePosition(
+        collectableBoxCountText.transform.DOShakePosition(
             duration: _gameSettings.conveyorIsFullEffectTextShakeDuration,
             strength: _gameSettings.conveyorIsFullEffectTextShakeStrength,
             vibrato: _gameSettings.conveyorIsFullEffectTextShakeVibrato,
@@ -76,15 +76,15 @@ public class Conveyor : MonoBehaviour
             fadeOut: true
         ).OnComplete(() =>
         {
-            shooterCountText.DOColor(Color.white, _gameSettings.conveyorIsFullEffectTextColorFixDuration);
+            collectableBoxCountText.DOColor(Color.white, _gameSettings.conveyorIsFullEffectTextColorFixDuration);
         });
     }
 
     public void LevelFailed()
     {
-        foreach (var shooter in _shootersOnConveyor)
+        foreach (var collectableBox in _collectableBoxesOnConveyor)
         {
-            shooter.Stop();
+            collectableBox.Stop();
         }
 
         foreach (var arrow in _arrows)
@@ -124,13 +124,13 @@ public class Conveyor : MonoBehaviour
 
     public void SetPlates(ObjectPool pool, Level level)
     {
-        _shooterPlates = new List<GameObject>();
-        for (int i = 0; i < _gameSettings.conveyorShooterLimit; i++)
+        _collectableBoxPlates = new List<GameObject>();
+        for (int i = 0; i < _gameSettings.conveyorCollectableBoxLimit; i++)
         {
             var position = plateStartPosition.position -
-                           Vector3.right * (_gameSettings.conveyorShooterPlatePositionDistance * i);
+                           Vector3.right * (_gameSettings.conveyorCollectableBoxPlatePositionDistance * i);
             var plate = pool.SpawnFromPool(PoolTags.ShooterPlate, position, plateStartPosition.rotation);
-            _shooterPlates.Add(plate);
+            _collectableBoxPlates.Add(plate);
 
             level.SpawnedPlate(plate);
         }
@@ -138,8 +138,8 @@ public class Conveyor : MonoBehaviour
 
     public GameObject GetPlate()
     {
-        var plate = _shooterPlates[0];
-        _shooterPlates.RemoveAt(0);
+        var plate = _collectableBoxPlates[0];
+        _collectableBoxPlates.RemoveAt(0);
         plate.transform.DOKill();
         FixNextPlatesPosition();
         return plate;
@@ -150,20 +150,20 @@ public class Conveyor : MonoBehaviour
         plate.transform.SetParent(transform);
         plate.transform.DOMove(
             plateStartPosition.position - Vector3.right *
-            (_gameSettings.conveyorShooterPlatePositionDistance * _shooterPlates.Count),
+            (_gameSettings.conveyorCollectableBoxPlatePositionDistance * _collectableBoxPlates.Count),
             _gameSettings.plateMoveDuration);
         plate.transform.DORotate(plateStartPosition.eulerAngles, _gameSettings.plateMoveDuration);
-        _shooterPlates.Add(plate);
+        _collectableBoxPlates.Add(plate);
     }
 
     private void FixNextPlatesPosition()
     {
-        for (int i = 0; i < _shooterPlates.Count; i++)
+        for (int i = 0; i < _collectableBoxPlates.Count; i++)
         {
-            _shooterPlates[i].transform
+            _collectableBoxPlates[i].transform
                 .DOMove(
                     plateStartPosition.position -
-                    Vector3.right * (_gameSettings.conveyorShooterPlatePositionDistance * i), 0.1f);
+                    Vector3.right * (_gameSettings.conveyorCollectableBoxPlatePositionDistance * i), 0.1f);
         }
     }
 }

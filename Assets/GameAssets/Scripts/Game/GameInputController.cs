@@ -3,22 +3,22 @@ using UnityEngine;
 public class GameInputController : MonoBehaviour, IInputListener
 {
     private InputManager _inputManager;
-    private ShooterManager _shooterManager;
+    private CollectableBoxManager _collectableBoxManager;
 
-    private Shooter _selectedShooter;
+    private CollectableBox _selectedCollectableBox;
     private Camera _mainCamera;
-    private LayerMask _layerShooter;
+    private LayerMask _layerCollectableBox;
 
-    public void Inject(InputManager inputManager, ShooterManager shooterManager)
+    public void Inject(InputManager inputManager, CollectableBoxManager collectableBoxManager)
     {
         _inputManager = inputManager;
-        _shooterManager = shooterManager;
+        _collectableBoxManager = collectableBoxManager;
     }
 
     private void Awake()
     {
         _mainCamera = Camera.main;
-        _layerShooter = LayerMask.GetMask("Shooter");
+        _layerCollectableBox = LayerMask.GetMask("CollectableBox");
     }
 
     private void OnEnable()
@@ -51,18 +51,18 @@ public class GameInputController : MonoBehaviour, IInputListener
     public void OnPressed()
     {
         var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out var hit, Mathf.Infinity, _layerShooter))
+        if (Physics.Raycast(ray, out var hit, Mathf.Infinity, _layerCollectableBox))
         {
-            var shooter = hit.collider.gameObject.GetComponentInParent<Shooter>();
-            if (shooter == null)
+            var collectableBox = hit.collider.gameObject.GetComponentInParent<CollectableBox>();
+            if (collectableBox == null)
             {
                 return;
             }
-            if (!shooter.IsSelectable)
+            if (!collectableBox.IsSelectable)
             {
                 return;
             }
-            _selectedShooter = shooter;
+            _selectedCollectableBox = collectableBox;
         }
     }
 
@@ -72,21 +72,21 @@ public class GameInputController : MonoBehaviour, IInputListener
 
     public void OnReleased(Vector2 dragVector)
     {
-        if (_selectedShooter == null)
+        if (_selectedCollectableBox == null)
         {
             return;
         }
 
         var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out var hit, Mathf.Infinity, _layerShooter))
+        if (Physics.Raycast(ray, out var hit, Mathf.Infinity, _layerCollectableBox))
         {
-            var shooter = hit.collider.gameObject.GetComponentInParent<Shooter>();
-            if (shooter != null || shooter == _selectedShooter)
+            var collectableBox = hit.collider.gameObject.GetComponentInParent<CollectableBox>();
+            if (collectableBox != null || collectableBox == _selectedCollectableBox)
             {
-                _shooterManager.ShooterSelected(shooter);
+                _collectableBoxManager.CollectableBoxSelected(collectableBox);
             }
         }
 
-        _selectedShooter = null;
+        _selectedCollectableBox = null;
     }
 }

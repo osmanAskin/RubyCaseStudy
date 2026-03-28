@@ -4,16 +4,16 @@ using UnityEngine;
 public class DirectionChanger : MonoBehaviour
 {
     //TODO: Shooterlarin isimlerini box olarak degistir hem prefab hem scriptlerde
-    public ShooterDirection ShooterNextDirection;
+    public CollectableBoxDirection CollectableBoxNextDirection;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Shooter"))
+        if (other.CompareTag("CollectableBox"))
         {
-            var shooter = other.GetComponentInParent<Shooter>();
-            if (shooter == null) return;
+            var collectableBox = other.GetComponentInParent<CollectableBox>();
+            if (collectableBox == null) return;
 
-            shooter.SetDirection(ShooterNextDirection);
+            collectableBox.SetDirection(CollectableBoxNextDirection);
         }
     }
 }

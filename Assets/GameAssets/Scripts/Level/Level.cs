@@ -3,23 +3,23 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    [SerializeField] private ShooterGridSystem shooterGridSystem;
+    [SerializeField] private CollectableBoxGridSystem collectableBoxGridSystem;
     [SerializeField] public ColorCubeGridSystem colorCubeGridSystem;
     [SerializeField] private ReservedSlotGridSystem reservedSlotGridSystem;
     [SerializeField] private Conveyor conveyor;
 
     public LevelData LevelData { get; private set; }
     public Conveyor Conveyor => conveyor;
-    public ShooterGridSystem ShooterGridSystem => shooterGridSystem;
+    public CollectableBoxGridSystem CollectableBoxGridSystem => collectableBoxGridSystem;
     public ReservedSlotGridSystem ReservedSlotGridSystem => reservedSlotGridSystem;
 
     private GameSettings _gameSettings;
 
     private List<ColorCube> _cubes = new List<ColorCube>();
-    private List<Shooter> _shooters = new List<Shooter>();
+    private List<CollectableBox> _collectableBoxes = new List<CollectableBox>();
     private List<ConveyorArrow> _arrows = new List<ConveyorArrow>();
     private List<Node> _reservedSlots = new List<Node>();
-    private List<Node> _shooterNodes = new List<Node>();
+    private List<Node> _collectableBoxNodes = new List<Node>();
     private List<Node> _colorCubeNodes = new List<Node>();
     private List<GameObject> _plates = new List<GameObject>();
 
@@ -31,7 +31,7 @@ public class Level : MonoBehaviour
         _gameSettings = settings;
         _pool = pool;
 
-        shooterGridSystem.Init(pool, data.shooterGridSize);
+        collectableBoxGridSystem.Init(pool, data.shooterGridSize);
 
         var spaceX = colorCubeGridSystem.gridSpaceX *
                      (_gameSettings.defaultTextureWidth / data.colorCubeGridSize.x);
@@ -50,7 +50,7 @@ public class Level : MonoBehaviour
         colorCubeGridSystem.Init(pool, data.colorCubeGridSize);
         reservedSlotGridSystem.Init(pool, new Vector2Int(_gameSettings.reservedSlotCount, 1));
 
-        CreateShooters(pool);
+        CreateCollectableBoxes(pool);
         CreateColorCubes(cubeScale, pool);
         reservedSlotGridSystem.SetSlotValues(_gameSettings.reservedSlotWarningEffectDuration,
             _gameSettings.reservedSlotWarningEffectCount);
@@ -58,7 +58,7 @@ public class Level : MonoBehaviour
         conveyor.Init(pool, this, _gameSettings);
     }
 
-    private void CreateShooters(ObjectPool pool)
+    private void CreateCollectableBoxes(ObjectPool pool)
     {
         for (int i = 0; i < LevelData.CellsData.GetLength(0); i++)
         {
@@ -66,16 +66,16 @@ public class Level : MonoBehaviour
             {
                 var data = LevelData.CellsData[i, j];
                 if (data.shootCount == 0) continue;
-                var node = shooterGridSystem.GetNode(i, shooterGridSystem.gridHeight - j - 1);
+                var node = collectableBoxGridSystem.GetNode(i, collectableBoxGridSystem.gridHeight - j - 1);
 
-                var shooter = pool.SpawnFromPool(PoolTags.Shooter, node.transform.position,
-                    node.transform.rotation).GetComponent<Shooter>();
-                shooter.transform.SetParent(node.transform);
-                shooter.Init(data, _gameSettings);
-                shooter.Initialize(node);
-                node.AssignNodeObject(shooter);
+                var collectableBox = pool.SpawnFromPool(PoolTags.CollectableBox, node.transform.position,
+                    node.transform.rotation).GetComponent<CollectableBox>();
+                collectableBox.transform.SetParent(node.transform);
+                collectableBox.Init(data, _gameSettings);
+                collectableBox.Initialize(node);
+                node.AssignNodeObject(collectableBox);
 
-                _shooters.Add(shooter);
+                _collectableBoxes.Add(collectableBox);
             }
         }
     }
@@ -117,10 +117,10 @@ public class Level : MonoBehaviour
             _pool.DestroyToPool(PoolTags.ColorCube, colorCube.gameObject);
         }
 
-        foreach (var shooter in _shooters)
+        foreach (var collectableBox in _collectableBoxes)
         {
-            shooter.transform.SetParent(_pool.transform);
-            _pool.DestroyToPool(PoolTags.Shooter, shooter.gameObject);
+            collectableBox.transform.SetParent(_pool.transform);
+            _pool.DestroyToPool(PoolTags.CollectableBox, collectableBox.gameObject);
         }
 
         foreach (var arrow in _arrows)
@@ -136,11 +136,11 @@ public class Level : MonoBehaviour
             _pool.DestroyToPool(PoolTags.ReservedSlot, slot.gameObject);
         }
 
-        _shooterNodes.AddRange(shooterGridSystem.GetAllNodes());
-        foreach (var node in _shooterNodes)
+        _collectableBoxNodes.AddRange(collectableBoxGridSystem.GetAllNodes());
+        foreach (var node in _collectableBoxNodes)
         {
             node.transform.SetParent(_pool.transform);
-            _pool.DestroyToPool(PoolTags.ShooterNode, node.gameObject);
+            _pool.DestroyToPool(PoolTags.CollectableBoxNode, node.gameObject);
         }
 
         _colorCubeNodes.AddRange(colorCubeGridSystem.GetAllNodes());
@@ -157,10 +157,10 @@ public class Level : MonoBehaviour
         }
 
         _cubes.Clear();
-        _shooters.Clear();
+        _collectableBoxes.Clear();
         _arrows.Clear();
         _reservedSlots.Clear();
-        _shooterNodes.Clear();
+        _collectableBoxNodes.Clear();
         _colorCubeNodes.Clear();
         _plates.Clear();
     }

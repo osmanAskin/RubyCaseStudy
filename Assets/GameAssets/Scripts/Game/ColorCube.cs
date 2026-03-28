@@ -51,7 +51,7 @@ public class ColorCube : MonoBehaviour, INodeObject, IPoolObject
         return bestID;
     }
 
-    public void GetAbsorbed(Transform boxCenter, float duration, Ease moveEase, Ease scaleEase, ShooterManager shooterManager)
+    public void GetAbsorbed(Transform boxCenter, float duration, Ease moveEase, Ease scaleEase, CollectableBoxManager collectableBoxManager)
     {
         CurrentNode.SetEmpty(this);
         cubeCollider.enabled = false;
@@ -69,7 +69,7 @@ public class ColorCube : MonoBehaviour, INodeObject, IPoolObject
             .OnComplete(() =>
             {
                 gameObject.SetActive(false);
-                shooterManager.ColorCubeBlasted();
+                collectableBoxManager.ColorCubeBlasted();
             }).SetLink(gameObject, LinkBehaviour.KillOnDisable);
     }
 

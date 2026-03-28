@@ -5,27 +5,27 @@ using Dreamteck.Splines;
 using TMPro;
 using UnityEngine;
 
-public class Shooter : MonoBehaviour, INodeObject, IPoolObject
+public class CollectableBox : MonoBehaviour, INodeObject, IPoolObject
 {
     [SerializeField] private Renderer[] renderers;
     [SerializeField] private TMP_Text shootCountText;
     [SerializeField] private SplineFollower splineFollower;
     [SerializeField] private GameObject model;
 
-    private ShooterNode _currentShooterNode;
-    public ShooterNode CurrentShooterNode => _currentShooterNode;
+    private CollectableBoxNode _currentCollectableBoxNode;
+    public CollectableBoxNode CurrentCollectableBoxNode => _currentCollectableBoxNode;
     private ReservedSlot _reservedSlot;
 
     private LayerMask _layerColorCube;
     private int colorID;
 
     private bool _onConveyor;
-    private ShooterDirection _currentDirection;
+    private CollectableBoxDirection _currentDirection;
     private GameObject _currentPlate;
 
     public int ShootCount { get; set; }
 
-    public bool IsSelectable => _currentShooterNode == null || _currentShooterNode.IsFrontNode();
+    public bool IsSelectable => _currentCollectableBoxNode == null || _currentCollectableBoxNode.IsFrontNode();
 
     private CancellationTokenSource _shootCts;
 
@@ -43,7 +43,7 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
 
     public void Initialize(Node node)
     {
-        _currentShooterNode = node as ShooterNode;
+        _currentCollectableBoxNode = node as CollectableBoxNode;
     }
 
     public void Init(CellData data, GameSettings settings)
@@ -62,7 +62,7 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
         ShootCount = data.shootCount;
         SetShootCountText();
 
-        splineFollower.followSpeed = _gameSettings.shooterSpeed;
+        splineFollower.followSpeed = _gameSettings.collectableBoxSpeed;
 
         _layerColorCube = LayerMask.GetMask("ColorCube");
 
@@ -74,7 +74,7 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
         shootCountText.text = ShootCount.ToString();
     }
 
-    public void Selected(SplineComputer conveyorSpline, ShooterManager shooterManager, GameObject plate)
+    public void Selected(SplineComputer conveyorSpline, CollectableBoxManager collectableBoxManager, GameObject plate)
     {
         if (_reservedSlot != null)
         {
@@ -82,13 +82,13 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
             _reservedSlot = null;
         }
 
-        _currentShooterNode = null;
+        _currentCollectableBoxNode = null;
 
         var position = conveyorSpline.GetPointPosition(0);
         transform.DOKill();
-        transform.DOJump(position, _gameSettings.shooterSlotToConveyorJumpPower, 1,
-                _gameSettings.shooterSlotToConveyorJumpDuration)
-            .SetEase(_gameSettings.shooterSlotToConveyorJumpEase)
+        transform.DOJump(position, _gameSettings.collectableBoxSlotToConveyorJumpPower, 1,
+                _gameSettings.collectableBoxSlotToConveyorJumpDuration)
+            .SetEase(_gameSettings.collectableBoxSlotToConveyorJumpEase)
             .OnComplete(() =>
             {
                 plate.transform.SetParent(transform);
@@ -98,15 +98,15 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
                 splineFollower.follow = true;
                 splineFollower.enabled = true;
                 model.transform.localEulerAngles = Vector3.up * -90f;
-                StartAbsorbControl(shooterManager);
+                StartAbsorbControl(collectableBoxManager);
             });
 
         _currentPlate = plate;
-        plate.transform.DOJump(position, 1f, 1, _gameSettings.shooterSlotToConveyorJumpDuration);
-        plate.transform.DORotate(Vector3.zero, _gameSettings.shooterSlotToConveyorJumpDuration);
+        plate.transform.DOJump(position, 1f, 1, _gameSettings.collectableBoxSlotToConveyorJumpDuration);
+        plate.transform.DORotate(Vector3.zero, _gameSettings.collectableBoxSlotToConveyorJumpDuration);
     }
 
-    private async UniTask StartAbsorbControl(ShooterManager shooterManager)
+    private async UniTask StartAbsorbControl(CollectableBoxManager collectableBoxManager)
     {
         _shootCts?.Cancel();
         _shootCts = new CancellationTokenSource();
@@ -129,7 +129,7 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
                     {
                         AddBlastValue(colorCube.CurrentNode.GridPosition);
                         colorCube.GetAbsorbed(transform, _gameSettings.cubeAbsorbDuration,
-                            _gameSettings.cubeAbsorbMoveEase, _gameSettings.cubeAbsorbScaleEase, shooterManager);
+                            _gameSettings.cubeAbsorbMoveEase, _gameSettings.cubeAbsorbScaleEase, collectableBoxManager);
 
                         model.transform.DOKill();
                         model.transform.localScale = Vector3.one;
@@ -142,9 +142,9 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
                         if (ShootCount == 0)
                         {
                             _onConveyor = false;
-                            shooterManager.RemoveShooterFromConveyor(this, _currentPlate);
+                            collectableBoxManager.RemoveCollectableBoxFromConveyor(this, _currentPlate);
                             _currentPlate = null;
-                            shooterManager.ControlLastShooters();
+                            collectableBoxManager.ControlLastCollectableBoxes();
                             PlayShootCompletedEffect();
                             break;
                         }
@@ -153,7 +153,7 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
 
                 if (splineFollower.GetPercent() >= 1f)
                 {
-                    if (shooterManager.OnLastShooterEffect)
+                    if (collectableBoxManager.OnLastCollectableBoxEffect)
                     {
                         splineFollower.SetPercent(0);
                         splineFollower.Rebuild();
@@ -164,9 +164,9 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
                         _onConveyor = false;
                         splineFollower.follow = false;
                         splineFollower.enabled = false;
-                        shooterManager.RemoveShooterFromConveyor(this, _currentPlate);
+                        collectableBoxManager.RemoveCollectableBoxFromConveyor(this, _currentPlate);
                         _currentPlate = null;
-                        shooterManager.SetReservedSlot(this);
+                        collectableBoxManager.SetReservedSlot(this);
                     }
                 }
 
@@ -188,20 +188,20 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
     public void SetReservedSlot(ReservedSlot reservedSlot)
     {
         transform.DOKill();
-        transform.DOJump(reservedSlot.transform.position, _gameSettings.shooterToReservedSlotJumpPower, 1,
-            _gameSettings.shooterToReservedSlotJumpDuration).SetEase(_gameSettings.shooterToReservedSlotJumpEase);
+        transform.DOJump(reservedSlot.transform.position, _gameSettings.collectableBoxToReservedSlotJumpPower, 1,
+            _gameSettings.collectableBoxToReservedSlotJumpDuration).SetEase(_gameSettings.collectableBoxToReservedSlotJumpEase);
         transform.DORotate(reservedSlot.transform.rotation.eulerAngles,
-            _gameSettings.shooterToReservedSlotJumpDuration).OnUpdate(() =>
+            _gameSettings.collectableBoxToReservedSlotJumpDuration).OnUpdate(() =>
         {
             shootCountText.transform.eulerAngles = _defaultTextEulerAngles;
         });
-        model.transform.DOLocalRotate(Vector3.zero, _gameSettings.shooterToReservedSlotJumpDuration);
+        model.transform.DOLocalRotate(Vector3.zero, _gameSettings.collectableBoxToReservedSlotJumpDuration);
         _reservedSlot = reservedSlot;
     }
 
     public void ResetDirection()
     {
-        _currentDirection = ShooterDirection.Forward;
+        _currentDirection = CollectableBoxDirection.Forward;
         ResetBlastData();
     }
 
@@ -209,17 +209,17 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
     {
         switch (_currentDirection)
         {
-            case ShooterDirection.Forward: return Vector3.forward;
-            case ShooterDirection.Left: return Vector3.left;
-            case ShooterDirection.Back: return Vector3.back;
-            case ShooterDirection.Right: return Vector3.right;
+            case CollectableBoxDirection.Forward: return Vector3.forward;
+            case CollectableBoxDirection.Left: return Vector3.left;
+            case CollectableBoxDirection.Back: return Vector3.back;
+            case CollectableBoxDirection.Right: return Vector3.right;
         }
         return Vector3.forward;
     }
 
     private bool CanBlast(Vector2Int coordinate)
     {
-        if (_currentDirection == ShooterDirection.Forward || _currentDirection == ShooterDirection.Back)
+        if (_currentDirection == CollectableBoxDirection.Forward || _currentDirection == CollectableBoxDirection.Back)
             return !blastedCoordinateValues.Contains(coordinate.x);
 
         return !blastedCoordinateValues.Contains(coordinate.y);
@@ -227,7 +227,7 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
 
     private void AddBlastValue(Vector2Int coordinate)
     {
-        if (_currentDirection == ShooterDirection.Forward || _currentDirection == ShooterDirection.Back)
+        if (_currentDirection == CollectableBoxDirection.Forward || _currentDirection == CollectableBoxDirection.Back)
         {
             blastedCoordinateValues.Add(coordinate.x);
             return;
@@ -240,16 +240,16 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
         blastedCoordinateValues.Clear();
     }
 
-    public void SetNewNode(ShooterNode to)
+    public void SetNewNode(CollectableBoxNode to)
     {
-        _currentShooterNode = to;
-        transform.DOMove(to.transform.position, _gameSettings.shooterNodeTransferDuration)
-            .SetEase(_gameSettings.shooterNodeTransferEase);
+        _currentCollectableBoxNode = to;
+        transform.DOMove(to.transform.position, _gameSettings.collectableBoxNodeTransferDuration)
+            .SetEase(_gameSettings.collectableBoxNodeTransferEase);
     }
 
-    public void SetDirection(ShooterDirection shooterNextDirection)
+    public void SetDirection(CollectableBoxDirection collectableBoxNextDirection)
     {
-        _currentDirection = shooterNextDirection;
+        _currentDirection = collectableBoxNextDirection;
         ResetBlastData();
     }
 
@@ -269,11 +269,11 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
     {
         splineFollower.follow = false;
         transform.DOKill();
-        transform.DOMoveZ(transform.position.z + _gameSettings.shooterCompleteEffectZPositionPlusValue,
-            _gameSettings.shooterCompleteEffectDuration);
-        transform.DORotate(Vector3.up * 180f, _gameSettings.shooterCompleteEffectDuration, RotateMode.WorldAxisAdd);
-        transform.DOScale(Vector3.zero, _gameSettings.shooterCompleteEffectDuration)
-            .SetEase(_gameSettings.shooterCompleteEffectScaleDownEase)
+        transform.DOMoveZ(transform.position.z + _gameSettings.collectableBoxCompleteEffectZPositionPlusValue,
+            _gameSettings.collectableBoxCompleteEffectDuration);
+        transform.DORotate(Vector3.up * 180f, _gameSettings.collectableBoxCompleteEffectDuration, RotateMode.WorldAxisAdd);
+        transform.DOScale(Vector3.zero, _gameSettings.collectableBoxCompleteEffectDuration)
+            .SetEase(_gameSettings.collectableBoxCompleteEffectScaleDownEase)
             .OnComplete(() => { gameObject.SetActive(false); });
     }
 
@@ -282,7 +282,7 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
         splineFollower.follow = false;
         splineFollower.enabled = false;
         model.transform.localEulerAngles = Vector3.zero;
-        _currentShooterNode = null;
+        _currentCollectableBoxNode = null;
         _reservedSlot = null;
         colorID = -1;
         _onConveyor = false;
@@ -295,7 +295,7 @@ public class Shooter : MonoBehaviour, INodeObject, IPoolObject
     }
 }
 
-public enum ShooterDirection
+public enum CollectableBoxDirection
 {
     Forward,
     Left,
