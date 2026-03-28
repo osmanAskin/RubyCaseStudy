@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class ShooterNode : Node
 {
     public bool IsFrontNode()

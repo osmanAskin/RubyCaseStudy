@@ -56,7 +56,6 @@ public class LevelData : SerializedScriptableObject
     [BoxGroup("Level Color Settings")]
     public float colorThreshold = 0.1f;
 
-    // for Color Palette Preview data
     [HideInInspector] public List<LevelColorData> runtimeColorStats = new();
 
     [BoxGroup("Shooter Grid Settings")] public Vector2Int shooterGridSize = new Vector2Int(3, 5);
