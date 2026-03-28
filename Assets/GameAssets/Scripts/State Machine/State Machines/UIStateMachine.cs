@@ -30,7 +30,7 @@ public class UIStateMachine : StateManager<UIStateMachine.UIState>
 
     protected override void SetStates()
     {
-        var startUI = new StartUIState(UIState.Start, UIState.InGame, _uiManager);
+        var startUI = new StartUIState(UIState.Start, UIState.InGame);
         var inGameUI = new InGameUIState(UIState.InGame, UIState.LevelEnd, _uiManager);
         var endUI = new LevelEndUIState(UIState.LevelEnd, UIState.Start, _settings, _uiManager);
 

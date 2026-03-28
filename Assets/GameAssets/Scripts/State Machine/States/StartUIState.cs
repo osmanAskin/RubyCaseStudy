@@ -1,11 +1,8 @@
 public class StartUIState : BaseState<UIStateMachine.UIState>
 {
-    private UIManager _uiManager;
-
-    public StartUIState(UIStateMachine.UIState key, UIStateMachine.UIState nextStateKey, UIManager uiManager) : base(key)
+    public StartUIState(UIStateMachine.UIState key, UIStateMachine.UIState nextStateKey) : base(key)
     {
         NextStateKey = nextStateKey;
-        _uiManager = uiManager;
     }
 
     public override void OnEnter()
