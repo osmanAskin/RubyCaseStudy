@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 
+//TODO: OnEditor taglerini kaldir
 public abstract class GridSystem : MonoBehaviour
 {
     public int gridWidth;
@@ -66,15 +67,11 @@ public abstract class GridSystem : MonoBehaviour
         SpawnNodes(pool, transform);
     }
 
-    protected virtual void SpawnNodes(ObjectPool pool, Transform parent = null, bool editorSpawn = false)
+    private void SpawnNodes(ObjectPool pool, Transform parent = null, bool editorSpawn = false)
     {
         _nodes = new Node[gridWidth, gridHeight];
 
-        float halfRowSize = (gridWidth - 1) * (1 + gridSpaceX) / 2f;
-        float halfColumnSizeY = (gridHeight - 1) * (1 + gridSpaceY) / 2f;
-        float halfColumnSizeZ = (gridHeight - 1) * (1 + gridSpaceZ) / 2f;
-
-        for (int i = 0; i < gridWidth; i++)
+        for (var i = 0; i < gridWidth; i++)
         {
             for (int j = 0; j < gridHeight; j++)
             {
@@ -107,7 +104,7 @@ public abstract class GridSystem : MonoBehaviour
         return nodeList.ToArray();
     }
 
-    public virtual void ResetSystem()
+    public void ResetSystem()
     {
         for (int i = 0; i < _nodes.GetLength(0); i++)
         {

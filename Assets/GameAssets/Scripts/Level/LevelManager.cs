@@ -38,10 +38,3 @@ public class LevelManager : MonoBehaviour
         GameEvents.LevelCompleted(completedLevelIndex);
     }
 }
-
-
-[System.Serializable]
-public class LevelNumberData
-{
-    public int[] levelNumbers;
-}

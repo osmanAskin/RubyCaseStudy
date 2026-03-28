@@ -8,20 +8,16 @@ public class GameManager : MonoBehaviour
     private MainStateMachine _mainStateMachine;
     private UIStateMachine _uiStateMachine;
     private LevelManager _levelManager;
-    private UIManager _uiManager;
     private ShooterManager _shooterManager;
-    private FXManager _fxManager;
 
     private CancellationTokenSource _restartCts;
 
     public void Inject(MainStateMachine mainStateMachine, UIStateMachine uiStateMachine,
-        LevelManager levelManager, FXManager fxManager, UIManager uiManager, ShooterManager shooterManager)
+        LevelManager levelManager, ShooterManager shooterManager)
     {
         _mainStateMachine = mainStateMachine;
         _uiStateMachine = uiStateMachine;
         _levelManager = levelManager;
-        _fxManager = fxManager;
-        _uiManager = uiManager;
         _shooterManager = shooterManager;
     }
 
@@ -102,14 +98,12 @@ public class GameManager : MonoBehaviour
     private void LevelCompleted()
     {
         _levelManager.NextLevel();
-        _fxManager.PlayLevelCompletedFX();
         Debug.Log("Level completed.");
     }
 
     private void LevelFailed()
     {
         Debug.Log("Level failed.");
-        _fxManager.PlayLevelFailedFX();
         _levelManager.CurrentLevel.Conveyor.LevelFailed();
     }
 }

@@ -7,7 +7,6 @@ using UnityEngine;
 public class Conveyor : MonoBehaviour
 {
     [SerializeField] private SplineComputer _spline;
-    public SplineComputer SplineComputer => _spline;
     [SerializeField] private TMP_Text shooterCountText;
     [SerializeField] private Transform plateStartPosition;
 
@@ -15,8 +14,9 @@ public class Conveyor : MonoBehaviour
     private List<Shooter> _shootersOnConveyor = new List<Shooter>();
     private ConveyorArrow[] _arrows;
     private List<GameObject> _shooterPlates;
-
     private GameSettings _gameSettings;
+    
+    public SplineComputer SplineComputer => _spline;
 
     private void Start()
     {

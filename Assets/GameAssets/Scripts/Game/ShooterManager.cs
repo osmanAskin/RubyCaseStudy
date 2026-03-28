@@ -4,15 +4,13 @@ public class ShooterManager : MonoBehaviour
 {
     private LevelManager _levelManager;
     private GameSettings _gameSettings;
-    private FXManager _fxManager;
 
     public bool OnLastShooterEffect { get; set; }
 
-    public void Inject(LevelManager levelManager, GameSettings gameSettings, FXManager fxManager)
+    public void Inject(LevelManager levelManager, GameSettings gameSettings)
     {
         _levelManager = levelManager;
         _gameSettings = gameSettings;
-        _fxManager = fxManager;
     }
 
     public void ShooterSelected(Shooter shooter)
@@ -24,7 +22,6 @@ public class ShooterManager : MonoBehaviour
             return;
         }
 
-        _fxManager.PlayShooterSelectedFX();
         conveyor.AddShooter(shooter);
 
         if (shooter.CurrentShooterNode != null)

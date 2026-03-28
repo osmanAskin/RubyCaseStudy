@@ -7,7 +7,6 @@ public class CoreInstaller : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private LevelManager levelManager;
     [SerializeField] private ShooterManager shooterManager;
-    [SerializeField] private FXManager fxManager;
     [SerializeField] private InputManager inputManager;
     [SerializeField] private GameInputController gameInputController;
     [SerializeField] private UIManager uiManager;
@@ -35,11 +34,11 @@ public class CoreInstaller : MonoBehaviour
     {
         dataManager.Inject(new JsonSaveSystem());
         levelManager.Inject(dataManager, gameSettings, levelPrefab, objectPool);
-        shooterManager.Inject(levelManager, gameSettings, fxManager);
+        shooterManager.Inject(levelManager, gameSettings);
         gameInputController.Inject(inputManager, shooterManager);
         uiStateMachine.Inject(uiManager, gameSettings);
         uiManager.Inject(levelManager, gameSettings);
-        gameManager.Inject(mainStateMachine, uiStateMachine, levelManager, fxManager, uiManager, shooterManager);
+        gameManager.Inject(mainStateMachine, uiStateMachine, levelManager, shooterManager);
     }
 
     private void Start()

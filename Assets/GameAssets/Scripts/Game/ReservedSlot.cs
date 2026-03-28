@@ -5,8 +5,8 @@ using UnityEngine;
 public class ReservedSlot : Node
 {
     [SerializeField] private SpriteRenderer warningEffect;
+    
     private float _warningEffectAlphaValue;
-
     private float _warningEffectDuration;
     private int _warningEffectCount;
 
