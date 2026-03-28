@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7238971267313503069
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5069062623004718268}
+  - component: {fileID: 8622582206631468190}
+  m_Layer: 0
+  m_Name: Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5069062623004718268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7238971267313503069}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5436861, y: -1.4176229, z: -0.48827004}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8622582206631468190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7238971267313503069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5f6fa74709fa5b4097b3ae679605f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - tag: 1
+    prefab: {fileID: 8569824485273583589, guid: 7a684f0a7708449bcb3c411242acb9df, type: 3}
+    size: 500
+    poolParent: {fileID: 0}
+  - tag: 2
+    prefab: {fileID: 8145174122574774961, guid: b6141cf863d834affae30e5f98b6af44, type: 3}
+    size: 100
+    poolParent: {fileID: 0}
+  - tag: 3
+    prefab: {fileID: 2110308245412406714, guid: 65f614131ff3345b49465963a7957bf6, type: 3}
+    size: 250
+    poolParent: {fileID: 0}
+  - tag: 4
+    prefab: {fileID: 8718456199327258174, guid: 3a65791da3901459891167c80d3f0937, type: 3}
+    size: 60
+    poolParent: {fileID: 0}
+  - tag: 5
+    prefab: {fileID: 4787271265891423120, guid: 4acc9fdd41438412c86caa7cc05079f1, type: 3}
+    size: 10
+    poolParent: {fileID: 0}
+  - tag: 6
+    prefab: {fileID: 8871067700690599841, guid: cdd9b6f941a6046a6b9eb72a0763d450, type: 3}
+    size: 100
+    poolParent: {fileID: 0}
+  - tag: 7
+    prefab: {fileID: 5842881658341230400, guid: 70c9ad60ed219450e90ea71b573ab28c, type: 3}
+    size: 500
+    poolParent: {fileID: 0}
+  - tag: 8
+    prefab: {fileID: 3526830976311878842, guid: 9a4726b38fc2c4f26b46a76a4c8f791f, type: 3}
+    size: 20
+    poolParent: {fileID: 0}

@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6327553523105848769
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3237794541010682674}
+  - component: {fileID: 5597217815734769179}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3237794541010682674
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6327553523105848769}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5597217815734769179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6327553523105848769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d75637155c6949649c3bd25fee4d0dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasRefSize: {x: 1290, y: 2790}
+  initCoin: 0
+  isTimerEnable: 0
+  isProgressbarEnable: 0
+  secondChance:
+    isEnable: 0
+    requiredCoin: 0
+  rewardCoin:
+    isEnable: 0
+    coin: 0
+  isDummyHandActive: 0
+  boostItems:
+    isEnable: 0
+    items: []
+  preHome: {fileID: 1626574678352335804, guid: fe2beba3ac5004d548e53ea36ef3eeae, type: 3}
+  preGame: {fileID: 4157544612607010518, guid: e31a57b818eec490bb760535a681ee2e, type: 3}
+  preCompleted: {fileID: 7595021704105235767, guid: aa69071177e354e26af8c6ebcb461374, type: 3}
+  preFail: {fileID: 8317265640530768141, guid: 2c923d393c19f4e72a909f8c03b8980b, type: 3}
+  preTutorial: {fileID: 8317265640530768141, guid: 54366c0e50f4c4904873ad317ad3dacc, type: 3}
+  preSetting: {fileID: 5979159986927044754, guid: dd8e3d684ba4d47a28d5a6b8bc9d29c7, type: 3}
+  preSecondChance: {fileID: 5979159986927044754, guid: 3eeccf9117eaa409e8d4ca7408e25c86, type: 3}
+  preRewardCoin: {fileID: 5979159986927044754, guid: 4c5843f12e20c4d068dbea954007361f, type: 3}
+  screenRatio: 0
+  level: 0
+  uiGame: {fileID: 0}
