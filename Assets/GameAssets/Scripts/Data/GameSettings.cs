@@ -31,6 +31,7 @@ namespace RubyCase.Data
         [TabGroup("General")] public float collectableBoxCompleteEffectDuration = 0.5f;
         [TabGroup("General")] public Ease collectableBoxCompleteEffectScaleDownEase = Ease.InBack;
         [Space(15)] [TabGroup("General")] [Header("ABSORB SETTINGS")]
+        public float absorbLeadOffset = 0.5f;
         public float cubeAbsorbDuration = 0.4f;
 
         [TabGroup("General")] public Ease cubeAbsorbMoveEase = Ease.InBack;

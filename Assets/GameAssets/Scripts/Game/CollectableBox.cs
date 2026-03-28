@@ -131,6 +131,9 @@ namespace RubyCase.Game
                     shootCountText.transform.eulerAngles = _defaultTextEulerAngles;
                     var pos = transform.position;
                     pos.y = 0.282f;
+                    var moveDir = splineFollower.result.forward;
+                    moveDir.y = 0f;
+                    pos += moveDir.normalized * _gameSettings.absorbLeadOffset;
                     var ray = new Ray(pos, GetRayDirection());
 
                     if (Physics.Raycast(ray, out var hit, 10f, _layerColorCube))
