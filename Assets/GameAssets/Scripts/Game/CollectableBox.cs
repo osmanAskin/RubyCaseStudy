@@ -35,6 +35,7 @@ namespace RubyCase.Game
         private CancellationTokenSource _shootCts;
 
         private System.Collections.Generic.List<int> blastedCoordinateValues = new System.Collections.Generic.List<int>();
+        private int _pendingAbsorbs;
 
         private static MaterialPropertyBlock _mpb;
         private Vector3 _defaultTextEulerAngles;
@@ -140,29 +141,34 @@ namespace RubyCase.Game
                     {
                         var colorCube = hit.collider.GetComponentInParent<ColorCube>();
                         if (colorCube != null && colorCube.colorID == colorID &&
-                            CanBlast(colorCube.CurrentNode.GridPosition))
+                            CanBlast(colorCube.CurrentNode.GridPosition) &&
+                            ShootCount - _pendingAbsorbs > 0)
                         {
                             AddBlastValue(colorCube.CurrentNode.GridPosition);
+                            _pendingAbsorbs++;
                             colorCube.GetAbsorbed(transform, _gameSettings.cubeAbsorbDuration,
-                                _gameSettings.cubeAbsorbMoveEase, _gameSettings.cubeAbsorbScaleEase, collectableBoxManager);
+                                _gameSettings.cubeAbsorbMoveEase, _gameSettings.cubeAbsorbScaleEase, collectableBoxManager,
+                                () =>
+                                {
+                                    _pendingAbsorbs--;
 
-                            model.transform.DOKill();
-                            model.transform.localScale = Vector3.one;
-                            model.transform.DOPunchScale(_gameSettings.absorbPunchScale, _gameSettings.absorbPunchDuration,
-                                _gameSettings.absorbPunchVibrato, _gameSettings.absorbPunchElasticity);
+                                    model.transform.DOKill();
+                                    model.transform.localScale = Vector3.one;
+                                    model.transform.DOPunchScale(_gameSettings.absorbPunchScale, _gameSettings.absorbPunchDuration,
+                                        _gameSettings.absorbPunchVibrato, _gameSettings.absorbPunchElasticity);
 
-                            ShootCount--;
-                            SetShootCountText();
+                                    ShootCount--;
+                                    SetShootCountText();
 
-                            if (ShootCount == 0)
-                            {
-                                _onConveyor = false;
-                                collectableBoxManager.RemoveCollectableBoxFromConveyor(this, _currentPlate);
-                                _currentPlate = null;
-                                collectableBoxManager.ControlLastCollectableBoxes();
-                                PlayShootCompletedEffect();
-                                break;
-                            }
+                                    if (ShootCount == 0)
+                                    {
+                                        _onConveyor = false;
+                                        collectableBoxManager.RemoveCollectableBoxFromConveyor(this, _currentPlate);
+                                        _currentPlate = null;
+                                        collectableBoxManager.ControlLastCollectableBoxes();
+                                        PlayShootCompletedEffect();
+                                    }
+                                });
                         }
                     }
 
@@ -304,6 +310,7 @@ namespace RubyCase.Game
             _onConveyor = false;
             ResetDirection();
             ShootCount = 0;
+            _pendingAbsorbs = 0;
             _shootCts?.Cancel();
             transform.localScale = Vector3.one;
             transform.localEulerAngles = Vector3.zero;

@@ -55,7 +55,7 @@ namespace RubyCase.Game
             return bestID;
         }
 
-        public void GetAbsorbed(Transform boxCenter, float duration, Ease moveEase, Ease scaleEase, CollectableBoxManager collectableBoxManager)
+        public void GetAbsorbed(Transform boxCenter, float duration, Ease moveEase, Ease scaleEase, CollectableBoxManager collectableBoxManager, System.Action onAbsorbed = null)
         {
             CurrentNode.SetEmpty(this);
             cubeCollider.enabled = false;
@@ -72,6 +72,7 @@ namespace RubyCase.Game
                 .Join(transform.DOScale(Vector3.zero, duration).SetEase(scaleEase))
                 .OnComplete(() =>
                 {
+                    onAbsorbed?.Invoke();
                     gameObject.SetActive(false);
                     collectableBoxManager.ColorCubeBlasted();
                 }).SetLink(gameObject, LinkBehaviour.KillOnDisable);
