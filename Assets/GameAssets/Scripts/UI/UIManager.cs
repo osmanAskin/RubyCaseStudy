@@ -9,14 +9,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private UIWin pageWin;
     [SerializeField] private UIFail pageFail;
 
-    private LevelManager _levelManager;
-    private GameSettings _gameSettings;
-
     public void Inject(LevelManager levelManager, GameSettings gameSettings)
     {
-        _levelManager = levelManager;
-        _gameSettings = gameSettings;
-
         pageGame.Inject(levelManager);
         pageWin.Inject(gameSettings);
     }
