@@ -28,6 +28,7 @@ MonoBehaviour:
   collectableBoxCompleteEffectZPositionPlusValue: 1
   collectableBoxCompleteEffectDuration: 0.5
   collectableBoxCompleteEffectScaleDownEase: 26
+  absorbLeadOffset: 0.5
   cubeAbsorbDuration: 0.4
   cubeAbsorbMoveEase: 26
   cubeAbsorbScaleEase: 26
@@ -56,3 +57,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e22c26ff19d4a9141ae7193916f0ab76, type: 2}
   - {fileID: 11400000, guid: ad04f998e47bf44329f139092b9ce3a6, type: 2}
   - {fileID: 11400000, guid: 12faf43cf2b1b484d922a8e7e7cde656, type: 2}
+  - {fileID: 11400000, guid: ea8c2e0f02d718c46a0f266b738b2038, type: 2}
