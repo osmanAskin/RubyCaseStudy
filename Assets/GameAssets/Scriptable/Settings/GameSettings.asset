@@ -15,19 +15,19 @@ MonoBehaviour:
   levelCompletedUIDelay: 0.5
   levelFailedUIDelay: 0.5
   randomStartIndex: 0
-  shooterSpeed: 3
-  lastShooterEffectTimeScale: 1.4
-  shooterSlotToConveyorJumpDuration: 0.25
-  shooterSlotToConveyorJumpPower: 2
-  shooterSlotToConveyorJumpEase: 1
-  shooterToReservedSlotJumpDuration: 0.25
-  shooterToReservedSlotJumpPower: 1
-  shooterToReservedSlotJumpEase: 1
-  shooterNodeTransferDuration: 0.2
-  shooterNodeTransferEase: 1
-  shooterCompleteEffectZPositionPlusValue: 1
-  shooterCompleteEffectDuration: 0.5
-  shooterCompleteEffectScaleDownEase: 26
+  collectableBoxSpeed: 3
+  lastCollectableBoxEffectTimeScale: 2
+  collectableBoxSlotToConveyorJumpDuration: 0.5
+  collectableBoxSlotToConveyorJumpPower: 1
+  collectableBoxSlotToConveyorJumpEase: 1
+  collectableBoxToReservedSlotJumpDuration: 0.5
+  collectableBoxToReservedSlotJumpPower: 1
+  collectableBoxToReservedSlotJumpEase: 1
+  collectableBoxNodeTransferDuration: 0.3
+  collectableBoxNodeTransferEase: 1
+  collectableBoxCompleteEffectZPositionPlusValue: 1
+  collectableBoxCompleteEffectDuration: 0.5
+  collectableBoxCompleteEffectScaleDownEase: 26
   cubeAbsorbDuration: 0.4
   cubeAbsorbMoveEase: 26
   cubeAbsorbScaleEase: 26
@@ -35,7 +35,7 @@ MonoBehaviour:
   absorbPunchDuration: 0.2
   absorbPunchVibrato: 5
   absorbPunchElasticity: 0.5
-  conveyorShooterLimit: 5
+  conveyorCollectableBoxLimit: 5
   conveyorArrowCount: 15
   conveyorArrowSpeed: 1
   conveyorIsFullEffectTextColor: {r: 1, g: 0, b: 0, a: 1}
@@ -45,7 +45,7 @@ MonoBehaviour:
   conveyorIsFullEffectTextShakeVibrato: 12
   conveyorIsFullEffectTextShakeRandomness: 60
   conveyorIsFullEffectTextColorFixDuration: 0.2
-  conveyorShooterPlatePositionDistance: 0.1
+  conveyorCollectableBoxPlatePositionDistance: 0.1
   plateMoveDuration: 0.3
   reservedSlotCount: 5
   reservedSlotWarningEffectCount: 2
@@ -53,6 +53,6 @@ MonoBehaviour:
   defaultTextureWidth: 20
   defaultTextureHeight: 20
   levels:
-  - {fileID: 11400000, guid: ea8c2e0f02d718c46a0f266b738b2038, type: 2}
+  - {fileID: 11400000, guid: e22c26ff19d4a9141ae7193916f0ab76, type: 2}
   - {fileID: 11400000, guid: ad04f998e47bf44329f139092b9ce3a6, type: 2}
   - {fileID: 11400000, guid: 12faf43cf2b1b484d922a8e7e7cde656, type: 2}
