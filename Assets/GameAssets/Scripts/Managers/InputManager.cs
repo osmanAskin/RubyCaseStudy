@@ -9,12 +9,7 @@ public class InputManager : MonoBehaviour
     private float _dragUnit;
     private float _dragUnitMultiplier = 1f / 12f;
     private bool _isPointerDown;
-
-    public void Inject()
-    {
-        // No dependencies needed
-    }
-
+    
     private void Awake()
     {
         _listeners = new List<IInputListener>();

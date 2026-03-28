@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SettingsManager : MonoBehaviour, ISettingsProvider
+public class SettingsManager : MonoBehaviour
 {
     private bool _vibrationEnabled;
 

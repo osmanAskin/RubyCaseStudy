@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -11,7 +12,7 @@ public class UIManager : MonoBehaviour
     private LevelManager _levelManager;
     private GameSettings _gameSettings;
 
-    public void Inject(LevelManager levelManager, GameSettings gameSettings, ISettingsProvider settingsProvider)
+    public void Inject(LevelManager levelManager, GameSettings gameSettings)
     {
         _levelManager = levelManager;
         _gameSettings = gameSettings;

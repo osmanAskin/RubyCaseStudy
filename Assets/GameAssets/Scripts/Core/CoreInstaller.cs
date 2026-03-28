@@ -8,7 +8,6 @@ public class CoreInstaller : MonoBehaviour
     [SerializeField] private LevelManager levelManager;
     [SerializeField] private ShooterManager shooterManager;
     [SerializeField] private FXManager fxManager;
-    [SerializeField] private SettingsManager settingsManager;
     [SerializeField] private InputManager inputManager;
     [SerializeField] private GameInputController gameInputController;
     [SerializeField] private UIManager uiManager;
@@ -29,28 +28,23 @@ public class CoreInstaller : MonoBehaviour
 
     private void Awake()
     {
-        InjectAll();
+        Install();
     }
 
-    private void InjectAll()
+    private void Install()
     {
         dataManager.Inject(new JsonSaveSystem());
-        settingsManager.Inject();
-        fxManager.Inject();
         levelManager.Inject(dataManager, gameSettings, levelPrefab, objectPool);
         shooterManager.Inject(levelManager, gameSettings, fxManager);
-        inputManager.Inject();
         gameInputController.Inject(inputManager, shooterManager);
-        mainStateMachine.Inject();
         uiStateMachine.Inject(uiManager, gameSettings);
-        uiManager.Inject(levelManager, gameSettings, settingsManager);
+        uiManager.Inject(levelManager, gameSettings);
         gameManager.Inject(mainStateMachine, uiStateMachine, levelManager, fxManager, uiManager, shooterManager);
     }
 
     private void Start()
     {
         dataManager.Initialize();
-        settingsManager.Initialize();
         levelManager.Initialize();
         mainStateMachine.Initialize();
         uiStateMachine.Initialize();

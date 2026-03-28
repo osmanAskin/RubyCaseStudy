@@ -7,11 +7,6 @@ public class MainStateMachine : StateManager<MainStateMachine.MainState>
         Finish,
     }
 
-    public void Inject()
-    {
-        // No dependencies needed
-    }
-
     private void OnEnable()
     {
         GameEvents.OnLevelEnd += OnLevelEnd;

@@ -16,7 +16,7 @@ public class LevelManager : MonoBehaviour
         _generator = new LevelGenerator(this, levelPrefab, settings, pool);
     }
 
-    public void SetUpLevel()
+    public void SetupLevel()
     {
         var levelData = _gameSettings.GetLevel(CurrentLevelNo);
         CurrentLevel = _generator.GenerateLevel(levelData);

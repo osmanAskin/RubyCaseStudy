@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     {
         _shooterManager.ResetSystem();
         _mainStateMachine.SetStateWithKey(MainStateMachine.MainState.Start);
-        _levelManager.SetUpLevel();
+        _levelManager.SetupLevel();
         _uiStateMachine.SetStateWithKey(UIStateMachine.UIState.InGame);
         _mainStateMachine.SetStateWithKey(MainStateMachine.MainState.Game);
     }

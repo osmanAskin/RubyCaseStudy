@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class FXManager : MonoBehaviour
 {
-    public void Inject() { }
 
     public void PlayShooterSelectedFX() { }
     public void PlayLevelCompletedFX() { }

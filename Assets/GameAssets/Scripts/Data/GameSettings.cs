@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -70,31 +69,17 @@ public class GameSettings : ScriptableObject
 
     public LevelData GetLevel(int index)
     {
-        if (levels == null || levels.Length == 0)
-        {
-#if UNITY_EDITOR
-            Debug.LogWarning("[GameSettings] Level list null or empty!");
-#endif
-            return null;
-        }
-
         if (index >= 0 && index < levels.Length)
             return levels[index];
 
         if (randomStartIndex < 0 || randomStartIndex >= levels.Length)
         {
-#if UNITY_EDITOR
             Debug.LogWarning($"[GameSettings] RandomStartIndex ({randomStartIndex}) is invalid, defaulting to 0.");
-#endif
             randomStartIndex = 0;
         }
 
-        int randomIndex = Random.Range(randomStartIndex, levels.Length);
-
-#if UNITY_EDITOR
+        var randomIndex = Random.Range(randomStartIndex, levels.Length);
         Debug.Log($"[GameSettings] Level {index} -> randomly selected: {randomIndex}");
-#endif
-
         return levels[randomIndex];
     }
 }

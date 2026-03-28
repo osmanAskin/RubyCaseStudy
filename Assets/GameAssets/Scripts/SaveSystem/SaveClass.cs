@@ -4,5 +4,4 @@ using System;
 public class GameData
 {
     public int currentLevelNumber;
-    public bool isHapticOn;
 }
