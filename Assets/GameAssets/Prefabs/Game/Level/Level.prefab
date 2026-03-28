@@ -35,8 +35,8 @@ Transform:
   - {fileID: 2649111750118608104}
   - {fileID: 3286872294743958913}
   - {fileID: 629674596727284630}
-  - {fileID: 8364277509411409129}
   - {fileID: 6756364931445594667}
+  - {fileID: 8364277509411409129}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3154087053831341421
@@ -65,7 +65,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 300795914184314359, guid: 0b6ac4e14d5f5489296fa6a3b3e00876, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.5
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 300795914184314359, guid: 0b6ac4e14d5f5489296fa6a3b3e00876, type: 3}
       propertyPath: m_LocalPosition.y
@@ -113,7 +113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2074835944612840748, guid: 0b6ac4e14d5f5489296fa6a3b3e00876, type: 3}
       propertyPath: CollectableBoxNextDirection
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -402,7 +402,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2074835944612840748, guid: 0b6ac4e14d5f5489296fa6a3b3e00876, type: 3}
       propertyPath: CollectableBoxNextDirection
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -545,7 +545,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2074835944612840748, guid: 0b6ac4e14d5f5489296fa6a3b3e00876, type: 3}
       propertyPath: CollectableBoxNextDirection
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
