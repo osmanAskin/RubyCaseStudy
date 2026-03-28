@@ -5,17 +5,14 @@ namespace RubyCase.Event
 {
     public static class GameEvents
     {
-        // UI → Game
         public static event Action<bool> OnRestart;
         public static event Action OnLevelSetupRequested;
-
-        // Game → Managers
+        
         public static event Action<int, Level.Level> OnLevelStart;
         public static event Action<bool, int> OnLevelEnd;
         public static event Action<int> OnLevelCompleted;
         public static event Action<int> OnLevelRestart;
 
-        // Internal requests (CollectableBoxManager → GameManager)
         public static event Action<bool> OnLevelEndRequested;
 
         public static void Restart(bool hard) => OnRestart?.Invoke(hard);

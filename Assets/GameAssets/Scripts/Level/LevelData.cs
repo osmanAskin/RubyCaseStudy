@@ -13,20 +13,20 @@ namespace RubyCase.Level
     public class LevelData : SerializedScriptableObject
     {
         [InfoBox(
-            "🧩 LEVEL CREATION GUIDE\n\n" +
-            "1️⃣ **Assign Texture** → Under *Level Texture Settings*, drag & drop a texture you want to use as the color source.\n" +
-            "   - The system will automatically detect its width/height as the cube grid size.\n\n" +
-            "2️⃣ **Click 'Create Colors'** → This analyzes the texture and groups similar colors.\n" +
-            "   - Use *Color Threshold* to control how close colors need to be to count as the same.\n\n" +
-            "3️⃣ **Initialize Grid** → Generates an empty shooter grid with your defined grid size.\n" +
-            "   - You can later resize it safely using 'Update Shooter Grid Size'.\n\n" +
-            "4️⃣ **Select Colors Below** → In the *Color Palette Preview* section at the bottom, click on any color box.\n" +
-            "   - The selected color will be highlighted as 'Selected'.\n\n" +
-            "5️⃣ **Paint the Grid** → Click on cells in the grid to assign the currently selected color.\n" +
-            "   - Press **Z** to increase the shoot count, **X** to decrease it for the hovered cell.\n\n" +
-            "6️⃣ **Auto Distribution (Optional)** → 'Distribute Colors To Grid' automatically fills the grid based on color sizes.\n\n" +
-            "7️⃣ **Validation** → Use 'Check Shooter Values' to confirm that total shoot counts match the color data sizes.\n\n" +
-            "💡 Tip: Keep the grid clean — gray cells are considered empty. Use smaller thresholds for more color variety.",
+            "LEVEL OLUSTURMA REHBERI\n\n" +
+            "1. **Texture Ata** → *Level Texture Settings* altinda, renk kaynagi olarak kullanmak istedigin texture'i surukle birak.\n" +
+            "   - Sistem, genislik/yuksekligini otomatik olarak cube grid boyutu olarak algilar.\n\n" +
+            "2. **'Create Colors' butonuna tikla** → Bu islem texture'i analiz ederek benzer renkleri gruplar.\n" +
+            "   - Renklerin ne kadar yakin olmasi gerektigini kontrol etmek icin *Color Threshold* degerini kullan.\n\n" +
+            "3. **Gridi Baslat** → Tanimladigin grid boyutunda bos bir shooter gridi olusturur.\n" +
+            "   - Daha sonra 'Update Shooter Grid Size' kullanarak boyutu guvenle degistirebilirsin.\n\n" +
+            "4. **Asagidan Renk Sec** → En alttaki *Color Palette Preview* bolumunde herhangi bir renk kutusuna tikla.\n" +
+            "   - Secilen renk 'Selected' olarak vurgulanir.\n\n" +
+            "5. **Gridi Boya** → Secili rengi atamak icin grid uzerindeki hucrelere tikla.\n" +
+            "   - Uzerinde oldugun hucre icin atim sayisini artirmak icin **Z**, azaltmak icin **X** tusuna bas.\n\n" +
+            "6. **Otomatik Dagilim (Opsiyonel)** → 'Distribute Colors To Grid', gridi renk boyutlarina gore otomatik olarak doldurur.\n\n" +
+            "7. **Dogrulama** → Toplam atim sayilarinin renk verisi boyutlariyla eslestigini dogrulamak icin 'Check Shooter Values' kullan.\n\n" +
+            "Ipucu: Gridi temiz tut - gri hucreler bos kabul edilir. Daha fazla renk cesidi icin daha kucuk esik degerleri kullan.",
             InfoMessageType = InfoMessageType.Info)]
         [ShowInInspector, ReadOnly, PropertyOrder(-100)]
         private string _infoBoxHeader => "";
