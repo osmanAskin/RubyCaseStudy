@@ -5,7 +5,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CanvasScaler))]
 public class UIPage : MonoBehaviour
 {
-    protected UIManager _uiManager;
     [HideInInspector] public Action OnClose;
 
     protected virtual void Awake()
@@ -15,11 +14,6 @@ public class UIPage : MonoBehaviour
         {
             canvasScaler.matchWidthOrHeight = 1f;
         }
-    }
-
-    public void Construct(UIManager uiManager)
-    {
-        _uiManager = uiManager;
     }
 
     public void OnTapClose()

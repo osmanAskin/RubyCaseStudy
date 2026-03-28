@@ -18,10 +18,7 @@ public class UIManager : MonoBehaviour
         _gameSettings = gameSettings;
 
         pageGame.Inject(levelManager);
-        pageGame.Construct(this);
         pageWin.Inject(gameSettings);
-        pageWin.Construct(this);
-        pageFail.Construct(this);
     }
 
     private void Awake()
