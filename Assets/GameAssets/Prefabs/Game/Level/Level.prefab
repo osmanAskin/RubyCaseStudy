@@ -111,6 +111,10 @@ PrefabInstance:
       propertyPath: ShooterNextDirection
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2074835944612840748, guid: 0b6ac4e14d5f5489296fa6a3b3e00876, type: 3}
+      propertyPath: CollectableBoxNextDirection
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -396,6 +400,10 @@ PrefabInstance:
       propertyPath: ShooterNextDirection
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2074835944612840748, guid: 0b6ac4e14d5f5489296fa6a3b3e00876, type: 3}
+      propertyPath: CollectableBoxNextDirection
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -533,6 +541,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2074835944612840748, guid: 0b6ac4e14d5f5489296fa6a3b3e00876, type: 3}
       propertyPath: ShooterNextDirection
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2074835944612840748, guid: 0b6ac4e14d5f5489296fa6a3b3e00876, type: 3}
+      propertyPath: CollectableBoxNextDirection
       value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []

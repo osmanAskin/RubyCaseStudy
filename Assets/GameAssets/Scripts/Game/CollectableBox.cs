@@ -44,6 +44,7 @@ public class CollectableBox : MonoBehaviour, INodeObject, IPoolObject
     public void Initialize(Node node)
     {
         _currentCollectableBoxNode = node as CollectableBoxNode;
+        UpdateTextOpacity();
     }
 
     public void Init(CellData data, GameSettings settings)
@@ -72,6 +73,12 @@ public class CollectableBox : MonoBehaviour, INodeObject, IPoolObject
     private void SetShootCountText()
     {
         shootCountText.text = ShootCount.ToString();
+    }
+
+    private void UpdateTextOpacity()
+    {
+        float targetAlpha = IsSelectable ? 1f : 0.5f;
+        shootCountText.DOFade(targetAlpha, 0.15f);
     }
 
     public void Selected(SplineComputer conveyorSpline, CollectableBoxManager collectableBoxManager, GameObject plate)
@@ -245,6 +252,7 @@ public class CollectableBox : MonoBehaviour, INodeObject, IPoolObject
         _currentCollectableBoxNode = to;
         transform.DOMove(to.transform.position, _gameSettings.collectableBoxNodeTransferDuration)
             .SetEase(_gameSettings.collectableBoxNodeTransferEase);
+        UpdateTextOpacity();
     }
 
     public void SetDirection(CollectableBoxDirection collectableBoxNextDirection)
