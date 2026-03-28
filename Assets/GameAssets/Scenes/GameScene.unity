@@ -119,77 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &390429876
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 390429878}
-  - component: {fileID: 390429877}
-  m_Layer: 0
-  m_Name: UIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &390429877
+--- !u!114 &404159339 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 390429876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5e8d418f60c74bbf933fae4a3f84e9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  preHome: {fileID: 1626574678352335804, guid: fe2beba3ac5004d548e53ea36ef3eeae, type: 3}
-  preGame: {fileID: 4157544612607010518, guid: e31a57b818eec490bb760535a681ee2e, type: 3}
-  preCompleted: {fileID: 7595021704105235767, guid: aa69071177e354e26af8c6ebcb461374, type: 3}
-  preFail: {fileID: 8317265640530768141, guid: 2c923d393c19f4e72a909f8c03b8980b, type: 3}
-  preSetting: {fileID: 5979159986927044754, guid: dd8e3d684ba4d47a28d5a6b8bc9d29c7, type: 3}
---- !u!4 &390429878
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 390429876}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &404159338 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6327553523105848769, guid: 3a2cd20e6e17c4c9a858837d7bc55285, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8796861644774498412, guid: 3a2cd20e6e17c4c9a858837d7bc55285, type: 3}
   m_PrefabInstance: {fileID: 1942489038}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &404159341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 404159338}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5e8d418f60c74bbf933fae4a3f84e9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preHome: {fileID: 1626574678352335804, guid: fe2beba3ac5004d548e53ea36ef3eeae, type: 3}
-  preGame: {fileID: 4157544612607010518, guid: e31a57b818eec490bb760535a681ee2e, type: 3}
-  preCompleted: {fileID: 7595021704105235767, guid: aa69071177e354e26af8c6ebcb461374, type: 3}
-  preFail: {fileID: 8317265640530768141, guid: 2c923d393c19f4e72a909f8c03b8980b, type: 3}
-  preSetting: {fileID: 5979159986927044754, guid: dd8e3d684ba4d47a28d5a6b8bc9d29c7, type: 3}
 --- !u!1 &695713452
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,7 +532,7 @@ MonoBehaviour:
   settingsManager: {fileID: 1812555493}
   inputManager: {fileID: 1812555492}
   gameInputController: {fileID: 1812555491}
-  uiManager: {fileID: 390429877}
+  uiManager: {fileID: 404159339}
   mainStateMachine: {fileID: 1812555489}
   uiStateMachine: {fileID: 1812555488}
   dataManager: {fileID: 1812555490}
@@ -771,14 +711,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIManager
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5597217815734769179, guid: 3a2cd20e6e17c4c9a858837d7bc55285, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6327553523105848769, guid: 3a2cd20e6e17c4c9a858837d7bc55285, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 404159341}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a2cd20e6e17c4c9a858837d7bc55285, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -789,5 +725,4 @@ SceneRoots:
   - {fileID: 1942489038}
   - {fileID: 1812555486}
   - {fileID: 1236668463}
-  - {fileID: 390429878}
   - {fileID: 695713455}

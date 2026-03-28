@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6065c50257a4b9c4791b9f6069c912e8, type: 3}
+  m_Name: Game Settings
+  m_EditorClassIdentifier: 
+  levelCompletedUIDelay: 1
+  levelFailedUIDelay: 1
+  randomStartIndex: 0
+  shooterSpeed: 3
+  lastShooterEffectTimeScale: 1.4
+  shooterSlotToConveyorJumpDuration: 0.25
+  shooterSlotToConveyorJumpPower: 2
+  shooterSlotToConveyorJumpEase: 1
+  shooterToReservedSlotJumpDuration: 0.25
+  shooterToReservedSlotJumpPower: 1
+  shooterToReservedSlotJumpEase: 1
+  shooterNodeTransferDuration: 0.2
+  shooterNodeTransferEase: 1
+  shooterCompleteEffectZPositionPlusValue: 1
+  shooterCompleteEffectDuration: 0.5
+  shooterCompleteEffectScaleDownEase: 26
+  cubeAbsorbDuration: 0.4
+  cubeAbsorbMoveEase: 26
+  cubeAbsorbScaleEase: 26
+  absorbPunchScale: {x: 0.3, y: 0.3, z: 0.3}
+  absorbPunchDuration: 0.2
+  absorbPunchVibrato: 5
+  absorbPunchElasticity: 0.5
+  conveyorShooterLimit: 5
+  conveyorArrowCount: 15
+  conveyorArrowSpeed: 3
+  conveyorIsFullEffectTextColor: {r: 1, g: 0, b: 0, a: 1}
+  conveyorIsFullEffectTextColorChangeDuration: 0.3
+  conveyorIsFullEffectTextShakeDuration: 0.35
+  conveyorIsFullEffectTextShakeStrength: {x: 0.05, y: 0.05, z: 0}
+  conveyorIsFullEffectTextShakeVibrato: 12
+  conveyorIsFullEffectTextShakeRandomness: 60
+  conveyorIsFullEffectTextColorFixDuration: 0.2
+  conveyorShooterPlatePositionDistance: 0.1
+  plateMoveDuration: 0.3
+  reservedSlotCount: 5
+  reservedSlotWarningEffectCount: 2
+  reservedSlotWarningEffectDuration: 0.5
+  defaultTextureWidth: 20
+  defaultTextureHeight: 20
+  levels:
+  - {fileID: 11400000, guid: ea8c2e0f02d718c46a0f266b738b2038, type: 2}
+  - {fileID: 11400000, guid: ad04f998e47bf44329f139092b9ce3a6, type: 2}
+  - {fileID: 11400000, guid: 12faf43cf2b1b484d922a8e7e7cde656, type: 2}
