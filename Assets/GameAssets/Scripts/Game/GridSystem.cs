@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 
-//TODO: OnEditor taglerini kaldir
 public abstract class GridSystem : MonoBehaviour
 {
     public int gridWidth;
@@ -13,30 +11,18 @@ public abstract class GridSystem : MonoBehaviour
     public bool coordinateXZ;
     public bool coordinateYZ;
 
-#if UNITY_EDITOR
     [OnValueChanged(nameof(OnInspectorChanged))]
-#endif
     public float centerX;
-#if UNITY_EDITOR
     [OnValueChanged(nameof(OnInspectorChanged))]
-#endif
     public float centerY;
-#if UNITY_EDITOR
     [OnValueChanged(nameof(OnInspectorChanged))]
-#endif
     public float centerZ;
 
-#if UNITY_EDITOR
     [OnValueChanged(nameof(OnInspectorChanged))]
-#endif
     public float gridSpaceX = 1f;
-#if UNITY_EDITOR
     [OnValueChanged(nameof(OnInspectorChanged))]
-#endif
     public float gridSpaceY = 1f;
-#if UNITY_EDITOR
     [OnValueChanged(nameof(OnInspectorChanged))]
-#endif
     public float gridSpaceZ = 1f;
 
     protected Node[,] _nodes;
@@ -44,22 +30,14 @@ public abstract class GridSystem : MonoBehaviour
     public PoolTags nodePoolTag;
 
     [Header("Z Position Control")]
-#if UNITY_EDITOR
     [OnValueChanged(nameof(OnInspectorChanged))]
-#endif
     public bool useCustomZStart;
-#if UNITY_EDITOR
     [OnValueChanged(nameof(OnInspectorChanged))]
-#endif
     public float customZStart;
 
-#if UNITY_EDITOR
     [OnValueChanged(nameof(OnInspectorChanged))]
-#endif
     public bool useCustomZEnd;
-#if UNITY_EDITOR
     [OnValueChanged(nameof(OnInspectorChanged))]
-#endif
     public float customZEnd;
 
     public virtual void Init(ObjectPool pool, Vector2Int size = default)
@@ -155,16 +133,10 @@ public abstract class GridSystem : MonoBehaviour
         return new Vector3(xPosition, yPosition, zPosition);
     }
 
-#if UNITY_EDITOR
     private void OnInspectorChanged()
     {
-        if (_nodes == null || _nodes.Length == 0)
-            return;
-
         UpdateNodePositions();
-        SceneView.RepaintAll();
     }
-#endif
 
     protected virtual void UpdateNodePositions()
     {
@@ -172,11 +144,7 @@ public abstract class GridSystem : MonoBehaviour
         {
             for (int j = 0; j < gridHeight; j++)
             {
-                if (_nodes[i, j] == null) continue;
                 _nodes[i, j].transform.position = GetNodePosition(i, j);
-#if UNITY_EDITOR
-                EditorUtility.SetDirty(_nodes[i, j]);
-#endif
             }
         }
     }

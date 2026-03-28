@@ -4,7 +4,6 @@ using UnityEngine;
 [Serializable]
 public class CellData
 {
-    // TODO: Coordinate update (nerden kullaniyorum)
     public Vector2Int coordinates;
     public Color cellColor;
     public int shootCount;
