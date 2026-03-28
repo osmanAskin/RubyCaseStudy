@@ -3,10 +3,10 @@ using UnityEngine;
 public class DataManager : MonoBehaviour
 {
     private GameData _gameData;
-    public GameData GameData => _gameData;
-
     private ISaveSystem _saveSystem;
 
+    public GameData GameData => _gameData;
+    
     public void Inject(ISaveSystem saveSystem)
     {
         _saveSystem = saveSystem;
@@ -65,12 +65,6 @@ public class DataManager : MonoBehaviour
     private void OnLevelCompleted(int levelIndex)
     {
         _gameData.currentLevelNumber = levelIndex + 1;
-        SaveData();
-    }
-
-    public void SetHaptic(bool isOn)
-    {
-        _gameData.isHapticOn = isOn;
         SaveData();
     }
 }
