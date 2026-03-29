@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6065c50257a4b9c4791b9f6069c912e8, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  levelCompletedUIDelay: 0.5
-  levelFailedUIDelay: 0.5
+  levelCompletedUIDelay: 1
+  levelFailedUIDelay: 1
   randomStartIndex: 0
   collectableBoxSpeed: 3
   lastCollectableBoxEffectTimeScale: 2
