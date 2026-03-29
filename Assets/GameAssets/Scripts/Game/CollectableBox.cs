@@ -163,8 +163,11 @@ namespace RubyCase.Game
                                     if (ShootCount == 0)
                                     {
                                         _onConveyor = false;
-                                        collectableBoxManager.RemoveCollectableBoxFromConveyor(this, _currentPlate);
-                                        _currentPlate = null;
+                                        if (_currentPlate != null)
+                                        {
+                                            collectableBoxManager.RemoveCollectableBoxFromConveyor(this, _currentPlate);
+                                            _currentPlate = null;
+                                        }
                                         collectableBoxManager.ControlLastCollectableBoxes();
                                         PlayShootCompletedEffect();
                                     }
@@ -289,6 +292,12 @@ namespace RubyCase.Game
 
         private void PlayShootCompletedEffect()
         {
+            if (_reservedSlot != null)
+            {
+                _reservedSlot.SetEmpty(this);
+                _reservedSlot = null;
+            }
+
             splineFollower.follow = false;
             transform.DOKill();
             transform.DOMoveZ(transform.position.z + _gameSettings.collectableBoxCompleteEffectZPositionPlusValue,
