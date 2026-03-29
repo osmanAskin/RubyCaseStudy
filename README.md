@@ -1,10 +1,16 @@
 # Ruby
 
-Renk eşleştirme mekaniği üzerine kurulu, konveyör bazlı bir mobil puzzle oyunu. Oyuncu, ızgara üzerindeki renkli küpleri temizlemek için CollectableBox'ları seçip konveyöre gönderiyor. Shooter'lar ilerlerken kendi renkleriyle eşleşen küpleri absorbe ediyor ve grid temizlenince seviye tamamlanıyor.
+Renk eşleştirme mekaniği üzerine kurulu, konveyör bazlı bir mobil puzzle oyunu. Oyuncu, ızgara üzerindeki renkli küpleri temizlemek için CollectableBox'ları seçip konveyöre gönderiyor. CollectableBox'lar ilerlerken kendi renkleriyle eşleşen küpleri absorbe ediyor ve grid temizlenince seviye tamamlanıyor.
 
 ---
 
 ## Oynanış
+
+
+
+https://github.com/user-attachments/assets/757fe0dc-bcb0-409f-b111-112fa9f62457
+
+
 
 - Ekrandaki CollectableBox kutularından birine tıklayıp konveyöre gönderiyorsun
 - Konveyörde ilerleyen CollectableBox, önüne gelen ve kendi rengiyle eşleşen küpleri çekiyor
