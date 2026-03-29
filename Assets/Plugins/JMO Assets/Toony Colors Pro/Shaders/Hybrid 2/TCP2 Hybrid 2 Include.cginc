@@ -1,5 +1,6 @@
 ﻿// Toony Colors Pro+Mobile 2
 // (c) 2014-2022 Jean Moreno
+// MODIFIED: _BaseColor moved to UNITY_INSTANCING_BUFFER for GPU instancing support with MaterialPropertyBlock
 
 /// #define fixed half
 /// #define fixed2 half2
@@ -18,11 +19,6 @@
 #endif
 
 #if defined(TCP2_HYBRID_URP)
-	// #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-	// This would cause a compilation error if URP isn't installed, so instead we use the dedicated
-	// "URP Support" file which contains all needed .hlslinc files embedded within a single file.
-	// #include "TCP2 Hybrid URP Support.cginc"
-
 	#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 	#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #if URP_VERSION >= 12
@@ -71,7 +67,7 @@ CBUFFER_START(UnityPerMaterial)
 
 	half _Cutoff;
 
-	half4 _BaseColor;
+	// NOTE: _BaseColor removed from here — moved to instancing buffer below
 
 	float4 _EmissionMap_ST;
 	half _EmissionChannel;
@@ -114,6 +110,12 @@ CBUFFER_START(UnityPerMaterial)
 	half _DirectIntensityOutline;
 	half _IndirectIntensityOutline;
 CBUFFER_END
+
+// ---- MODIFICATION: _BaseColor in instancing buffer so MPB.SetColor("_BaseColor") works with GPU instancing ----
+UNITY_INSTANCING_BUFFER_START(Props)
+	UNITY_DEFINE_INSTANCED_PROP(half4, _BaseColor)
+UNITY_INSTANCING_BUFFER_END(Props)
+// ---------------------------------------------------------------------------------------------------------------
 
 // Samplers
 sampler2D _BaseMap;
@@ -248,7 +250,6 @@ half CalculateSpecular(half3 lightDir, half3 viewDir, float3 normal, half specul
 }
 
 #if defined(_DBUFFER)
-	// Derived from 'ApplyDecal' in URP's DBuffer.hlsl, directly fetch the decal data so that we can blend it accordingly
 	DecalSurfaceData GetDecals(float4 positionCS)
 	{
 		FETCH_DBUFFER(DBuffer, _DBufferTexture, int2(positionCS.xy));
@@ -263,9 +264,6 @@ half CalculateSpecular(half3 lightDir, half3 viewDir, float3 normal, half specul
 		return decalSurfaceData;
 	}
 #endif
-
-// Custom macros to separate shadows from attenuation
-// Based on UNITY_LIGHT_ATTENUATION macros from "AutoLight.cginc"
 
 #ifdef POINT
 #	define TCP2_LIGHT_ATTENUATION(input, worldPos) \
@@ -332,7 +330,7 @@ struct Varyings
 	float3 normal          : NORMAL;
 	float4 worldPos        : TEXCOORD0; /* w = fog coords */
 	float4 texcoords       : TEXCOORD1; /* xy = main texcoords, zw = raw texcoords */
-#if defined(_NORMALMAP) || (defined(TCP2_MOBILE) && (defined(TCP2_RIM_LIGHTING) || (defined(TCP2_REFLECTIONS) && defined(TCP2_REFLECTIONS_FRESNEL)))) // if normalmap or (mobile + rim or fresnel)
+#if defined(_NORMALMAP) || (defined(TCP2_MOBILE) && (defined(TCP2_RIM_LIGHTING) || (defined(TCP2_REFLECTIONS) && defined(TCP2_REFLECTIONS_FRESNEL))))
 	float4 tangentWS       : TEXCOORD2; /* w = ndv (mobile) */
 #endif
 #if defined(_NORMALMAP)
@@ -343,7 +341,7 @@ struct Varyings
 #endif
 #if defined(TCP2_HYBRID_URP)
 	#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
-		float4 shadowCoord : TEXCOORD5; // compute shadow coord per-vertex for the main light
+		float4 shadowCoord : TEXCOORD5;
 	#endif
 	#ifdef _ADDITIONAL_LIGHTS_VERTEX
 		half3 vertexLights : TEXCOORD6;
@@ -415,7 +413,6 @@ VERTEX_OUTPUT Vertex(Attributes input)
 		#endif
 
 		#ifdef _ADDITIONAL_LIGHTS_VERTEX
-			// Vertex lighting
 			output.vertexLights = VertexLighting(positionWS, normalWS);
 		#endif
 	#else
@@ -438,34 +435,28 @@ VERTEX_OUTPUT Vertex(Attributes input)
 			float3 bitangentWS = cross(normalWS, tangentWS) * sign;
 		#endif
 
-		// This Unity macro expects the vertex input to be named 'v'
 		#define v input
 		UNITY_TRANSFER_LIGHTING(output, input.texcoord1.xy);
 	#endif
 
-	// world position
 	output.worldPos = float4(positionWS.xyz, 0);
 
-	// Compute fog factor
 	#if defined(TCP2_HYBRID_URP)
 		output.worldPos.w = ComputeFogFactor(positionCS.z);
 	#else
 		UNITY_TRANSFER_FOG_COMBINED_WITH_WORLD_POS(output, positionCS);
 	#endif
 
-	// normal
 	output.normal = normalWS;
 
-	// tangent
-	#if defined(_NORMALMAP) || (defined(TCP2_MOBILE) && (defined(TCP2_RIM_LIGHTING) || (defined(TCP2_REFLECTIONS) && defined(TCP2_REFLECTIONS_FRESNEL)))) // if mobile + rim or fresnel
+	#if defined(_NORMALMAP) || (defined(TCP2_MOBILE) && (defined(TCP2_RIM_LIGHTING) || (defined(TCP2_REFLECTIONS) && defined(TCP2_REFLECTIONS_FRESNEL))))
 		output.tangentWS = float4(0, 0, 0, 0);
 	#endif
 	#if defined(_NORMALMAP)
 		output.tangentWS.xyz = tangentWS;
 		output.bitangentWS.xyz = bitangentWS;
 	#endif
-	#if defined(TCP2_MOBILE) && (defined(TCP2_RIM_LIGHTING) || (defined(TCP2_REFLECTIONS) && defined(TCP2_REFLECTIONS_FRESNEL))) // if mobile + rim or fresnel
-		// Calculate ndv in vertex shader
+	#if defined(TCP2_MOBILE) && (defined(TCP2_RIM_LIGHTING) || (defined(TCP2_REFLECTIONS) && defined(TCP2_REFLECTIONS_FRESNEL)))
 		#if defined(TCP2_HYBRID_URP)
 			half3 viewDirWS = TCP2_SafeNormalize(GetCameraPositionWS() - positionWS);
 		#else
@@ -475,7 +466,6 @@ VERTEX_OUTPUT Vertex(Attributes input)
 	#endif
 
 	#if defined(TCP2_MATCAP) && !defined(_NORMALMAP)
-		// MatCap
 		float3 worldNorm = normalize(unity_WorldToObject[0].xyz * input.normal.x + unity_WorldToObject[1].xyz * input.normal.y + unity_WorldToObject[2].xyz * input.normal.z);
 		worldNorm = mul((float3x3)UNITY_MATRIX_V, worldNorm);
 		float4 screenPos = ComputeScreenPos(positionCS);
@@ -489,27 +479,21 @@ VERTEX_OUTPUT Vertex(Attributes input)
 	#endif
 }
 
-// Note: calculations from the main pass are defined with UNITY_PASS_FORWARDBASE
-// However it is left out sometimes because some keywords aren't defined for the
-// Forward Add pass (e.g. TCP2_MATCAP, TCP2_REFLECTIONS, ...)
-
 half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 {
 	UNITY_SETUP_INSTANCE_ID(input);
 	UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
-	// LOD Crossfading
+	half4 baseColor = UNITY_ACCESS_INSTANCED_PROP(Props, _BaseColor);
 	#if defined(LOD_FADE_CROSSFADE)
 		const float dither = Dither4x4(input.pos.xy);
 		const float ditherThreshold = unity_LODFade.x - CopySign(dither, unity_LODFade.x);
 		clip(ditherThreshold);
 	#endif
 
-	// Texture coordinates
 	float2 mainTexcoord = input.texcoords.xy;
 	float2 rawTexcoord = input.texcoords.zw;
 
-	// Vectors
 	float3 positionWS = input.worldPos.xyz;
 	float3 normalWS = normalize(input.normal);
 	normalWS.xyz *= (vFace < 0) ? -1.0 : 1.0;
@@ -524,8 +508,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		half3 bitangentWS = input.bitangentWS.xyz;
 		half3x3 tangentToWorldMatrix = half3x3(tangentWS.xyz, bitangentWS.xyz, normalWS.xyz);
 	#endif
-
-	// Lighting
 
 	#if defined(TCP2_HYBRID_URP)
 		#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
@@ -571,21 +553,18 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		#endif
 	#endif
 
-	// Base
-
+	// Base — _BaseColor now comes from instancing buffer (local variable declared above)
 	half4 albedo = tex2D(_BaseMap, mainTexcoord).rgba;
-	albedo.rgb *= _BaseColor.rgb;
-	half alpha = albedo.a * _BaseColor.a;
+	albedo.rgb *= baseColor.rgb;
+	half alpha = albedo.a * baseColor.a;
 	half3 emission = half3(0,0,0);
 
-	// Normal Mapping
 	#if defined(_NORMALMAP)
 		half4 normalMap = tex2D(_BumpMap, rawTexcoord * _BumpMap_ST.xy + _BumpMap_ST.zw).rgba;
 		half3 normalTS = UnpackScaleNormal(normalMap, _BumpScale);
 		normalWS = mul(normalTS, tangentToWorldMatrix);
 	#endif
 
-	// URP Decals
 	#if defined(_DBUFFER)
 		#if defined(_DBUFFER_MRT2) || defined(_DBUFFER_MRT3)
 			#define HAS_DECAL_NORMALS
@@ -597,7 +576,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		DecalSurfaceData decals = GetDecals(input.pos);
 		albedo.rgb = albedo.rgb * decals.baseColor.a + decals.baseColor.rgb;
 		#if defined(HAS_DECAL_NORMALS)
-			// Always test the normal as we can have decompression artifact
 			if (decals.normalWS.w < 1.0)
 			{
 				normalWS.xyz = normalize(normalWS.xyz * decals.normalWS.w + decals.normalWS.xyz);
@@ -605,12 +583,10 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		#endif
 	#endif
 
-	// Alpha Testing
 	#if defined(_ALPHATEST_ON)
 		clip(alpha - _Cutoff);
 	#endif
 
-	// Emission
 	#if defined(_EMISSION)
 		emission = _EmissionColor.rgb;
 		#if defined(TCP2_MOBILE)
@@ -635,7 +611,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		half3 meta_specular = half3(0, 0, 0);
 	#endif
 
-	// MatCap
 	#if defined(TCP2_MATCAP)
 		#if defined(_NORMALMAP)
 			half3 matcapCoordsNormal = mul((float3x3)UNITY_MATRIX_V, normalWS);
@@ -686,10 +661,8 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 	half ndlWrapped = ndl * 0.5 + 0.5;
 	ndl = saturate(ndl);
 
-	// Calculate ramp
 	half3 ramp = CalculateRamp(ndlWrapped);
 
-	// Apply attenuation
 	ramp *= atten;
 	#if defined(TCP2_RIM_LIGHTING)
 		#if defined(TCP2_RIM_LIGHTING_LIGHTMASK)
@@ -699,13 +672,11 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		#endif
 	#endif
 
-	// Shadow Albedo
 	#if defined(TCP2_SHADOW_TEXTURE)
 		half4 shadowAlbedo = tex2D(_ShadowBaseMap, mainTexcoord).rgba;
 		albedo = lerp(shadowAlbedo, albedo, ramp.x);
 	#endif
 
-	// Highlight/shadow colors
 	#if !defined(TCP2_SHADOW_LIGHT_COLOR)
 		half3 highlightColor = _HColor.rgb * lightColor.rgb;
 	#else
@@ -721,10 +692,8 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		ramp *= lightColor.rgb;
 	#endif
 
-	// Output color
 	half3 color = albedo.rgb * ramp;
 
-	// Occlusion
 	#if defined(TCP2_OCCLUSION)
 		half occlusion = GetOcclusion(_OcclusionMap, mainTexcoord, _OcclusionStrength, _OcclusionChannel, albedo);
 	#else
@@ -738,7 +707,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		occlusion = min(occlusion, aoFactor.indirectAmbientOcclusion);
 	#endif
 
-	// Setup lighting environment (Built-In)
 	#if !defined(TCP2_HYBRID_URP) && defined(UNITY_PASS_FORWARDBASE)
 		UnityGI gi;
 		UNITY_INITIALIZE_OUTPUT(UnityGI, gi);
@@ -747,7 +715,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		gi.light.color = lightColor;
 		gi.light.dir = lightDir;
 
-		// Call GI (lightmaps/SH/reflections) lighting function
 		UnityGIInput giInput;
 		UNITY_INITIALIZE_OUTPUT(UnityGIInput, giInput);
 		giInput.light = gi.light;
@@ -763,7 +730,7 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		giInput.probeHDR[0] = unity_SpecCube0_HDR;
 		giInput.probeHDR[1] = unity_SpecCube1_HDR;
 		#if defined(UNITY_SPECCUBE_BLENDING) || defined(UNITY_SPECCUBE_BOX_PROJECTION)
-			giInput.boxMin[0] = unity_SpecCube0_BoxMin; // .w holds lerp value for blending
+			giInput.boxMin[0] = unity_SpecCube0_BoxMin;
 		#endif
 		#ifdef UNITY_SPECCUBE_BOX_PROJECTION
 			giInput.boxMax[0] = unity_SpecCube0_BoxMax;
@@ -775,19 +742,16 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 
 		half3 shNormal = (_SingleIndirectColor > 0) ? viewDirWS : normalWS;
 		#if defined(TCP2_REFLECTIONS)
-			// GI: indirect diffuse & specular
 			half smoothness = _ReflectionSmoothness;
 			Unity_GlossyEnvironmentData g = UnityGlossyEnvironmentSetup(smoothness, giInput.worldViewDir, normalWS, half3(0,0,0));
 			gi = UnityGlobalIllumination(giInput, occlusion, shNormal, g);
 		#else
-			// GI: indirect diffuse only
 			gi = UnityGlobalIllumination(giInput, occlusion, shNormal);
 		#endif
 
-		gi.light.color = _LightColor0.rgb; // remove attenuation, taken into account separately
+		gi.light.color = _LightColor0.rgb;
 	#endif
 
-	// Apply ambient/indirect lighting
 	#if defined(UNITY_PASS_FORWARDBASE)
 		#if !defined(TCP2_MOBILE)
 			if (_IndirectIntensity > 0)
@@ -795,11 +759,9 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 	{
 		#if defined(TCP2_HYBRID_URP)
 			#ifdef LIGHTMAP_ON
-				// Normal is required in case Directional lightmaps are baked
 				half3 bakedGI = SampleLightmap(input.lightmapUV.xy, normalWS);
 				MixRealtimeAndBakedGI(mainLight, normalWS, bakedGI, half4(0, 0, 0, 0));
 			#else
-				// Sample SH fully per-pixel
 				half3 bakedGI = SampleSH(_SingleIndirectColor > 0 ? viewDirWS : normalWS);
 			#endif
 			half3 indirectDiffuse = bakedGI * occlusion * albedo.rgb * _IndirectIntensity;
@@ -811,7 +773,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 	}
 	#endif
 
-	// Calculate N.V
 	#if defined(TCP2_RIM_LIGHTING) || (defined(TCP2_REFLECTIONS) && defined(TCP2_REFLECTIONS_FRESNEL))
 		#if defined(TCP2_MOBILE)
 			half ndv = input.tangentWS.w;
@@ -820,7 +781,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		#endif
 	#endif
 
-	// Rim Lighting
 	#if defined(TCP2_RIM_LIGHTING)
 		#if defined(UNITY_PASS_FORWARDBASE) || defined(TCP2_RIM_LIGHTING_LIGHTMASK)
 			half rim = smoothstep(_RimMin, _RimMax, ndv);
@@ -828,7 +788,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		#endif
 	#endif
 
-	// Specular
 	#if defined(TCP2_SPECULAR)
 
 		half specularMap = 1.0;
@@ -870,7 +829,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 
 	#endif
 
-	// Meta pass
 	#if defined(UNITY_PASS_META)
 		#if defined(TCP2_HYBRID_URP)
 			MetaInput metaInput;
@@ -891,7 +849,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		#endif
 	#endif
 
-	// Additional lights loop
 	#if defined(TCP2_HYBRID_URP) && defined(_ADDITIONAL_LIGHTS)
 
 #if URP_VERSION >= 12
@@ -926,10 +883,8 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 				half ndlWrapped = ndl * 0.5 + 0.5;
 				ndl = saturate(ndl);
 
-				// Calculate ramp
 				half3 ramp = CalculateRamp(ndlWrapped);
 
-				// Apply attenuation (shadowmaps & point/spot lights attenuation)
 				ramp *= atten;
 
 				#if defined(TCP2_RIM_LIGHTING)
@@ -940,18 +895,14 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 					#endif
 				#endif
 
-				// Apply highlight color only
 				ramp = lerp(half3(0,0,0), _HColor.rgb, ramp);
 
-				// Output color
 				color += albedo.rgb * lightColor.rgb * ramp;
 
-				// Specular
 				#if defined(TCP2_SPECULAR)
 					half spec = CalculateSpecular(lightDir, viewDirWS, normalWS, specularMap);
 					emission.rgb += spec * atten * ndl * lightColor.rgb * _SpecularColor.rgb;
 				#endif
-				// Rim Lighting
 				#if defined(TCP2_RIM_LIGHTING) && defined(TCP2_RIM_LIGHTING_LIGHTMASK)
 					emission.rgb += rimMask * rim * _RimColor.rgb;
 				#endif
@@ -968,7 +919,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 
 	#endif
 
-	// Environment Reflection
 	#if defined(TCP2_REFLECTIONS)
 		half3 reflections = half3(0, 0, 0);
 
@@ -1044,7 +994,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 		emission.rgb += reflections;
 	#endif
 
-	// Premultiply blending
 	#if defined(_ALPHAPREMULTIPLY_ON)
 		color.rgb *= alpha;
 	#else
@@ -1053,7 +1002,6 @@ half4 Fragment (Varyings input, half vFace : VFACE) : SV_Target
 
 	color += emission;
 
-	// Fog
 	#if defined(TCP2_HYBRID_URP)
 		color = MixFog(color, input.worldPos.w);
 	#else
@@ -1105,7 +1053,7 @@ struct Varyings_Outline
 {
 	float4 pos       : SV_POSITION;
 	float4 vcolor    : TEXCOORD0;
-	float4 worldPos  : TEXCOORD1; // xyz = worldPos  w = fogFactor
+	float4 worldPos  : TEXCOORD1;
 #if defined(TCP2_OUTLINE_TEXTURED_FRAGMENT)
 	float4 texcoord0 : TEXCOORD2;
 #endif
@@ -1114,7 +1062,7 @@ struct Varyings_Outline
 #endif
 #if defined(TCP2_HYBRID_URP)
 	#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
-		float4 shadowCoord    : TEXCOORD4; // compute shadow coord per-vertex for the main light
+		float4 shadowCoord    : TEXCOORD4;
 	#endif
 	#if defined(TCP2_HYBRID_URP) && defined(TCP2_OUTLINE_LIGHTING_ALL) && defined(_ADDITIONAL_LIGHTS_VERTEX)
 		half3 vertexLights : TEXCOORD5;
@@ -1146,10 +1094,8 @@ Varyings_Outline vertex_outline (Attributes_Outline input)
 	#endif
 
 	#ifdef TCP2_COLORS_AS_NORMALS
-		//Vertex Color for Normals
 		float3 normal = (input.vertexColor.xyz*2) - 1;
 	#elif TCP2_TANGENT_AS_NORMALS
-		//Tangent for Normals
 		float3 normal = input.tangent.xyz;
 	#elif TCP2_UV1_AS_NORMALS || TCP2_UV2_AS_NORMALS || TCP2_UV3_AS_NORMALS || TCP2_UV4_AS_NORMALS
 		#if TCP2_UV1_AS_NORMALS
@@ -1163,10 +1109,8 @@ Varyings_Outline vertex_outline (Attributes_Outline input)
 		#endif
 
 		#if TCP2_UV_NORMALS_FULL
-		//UV for Normals, full
 		float3 normal = input.uvChannel.xyz;
 		#else
-		//UV for Normals, compressed
 		#if TCP2_UV_NORMALS_ZW
 			#define ch1 z
 			#define ch2 w
@@ -1175,25 +1119,16 @@ Varyings_Outline vertex_outline (Attributes_Outline input)
 			#define ch2 y
 		#endif
 		float3 n;
-		//unpack uvs
 		input.uvChannel.ch1 = input.uvChannel.ch1 * 255.0/16.0;
 		n.x = floor(input.uvChannel.ch1) / 15.0;
 		n.y = frac(input.uvChannel.ch1) * 16.0 / 15.0;
-		//- get z
 		n.z = input.uvChannel.ch2;
-		//- transform
 		n = n*2 - 1;
 		float3 normal = n;
 		#endif
 	#else
 		float3 normal = input.normal;
 	#endif
-
-	/// #if TCP2_ZSMOOTH_ON
-		/// //Correct Z artefacts
-		/// normal = UnityObjectToViewPos(normal);
-		/// normal.z = -_ZSmooth;
-	/// #endif
 
 	#if !defined(SHADOWCASTER_PASS)
 		output.pos = UnityObjectToClipPos(input.vertex.xyz);
@@ -1232,22 +1167,18 @@ Varyings_Outline vertex_outline (Attributes_Outline input)
 	float4 clipPos = output.pos;
 
 	#if defined(TCP2_OUTLINE_LIGHTING_ALL) && defined(_ADDITIONAL_LIGHTS_VERTEX)
-		// Vertex lighting
 		VertexNormalInputs vertexNormalInput = GetVertexNormalInputs(input.normal, input.tangent);
 		output.vertexLights = VertexLighting(positionWS, vertexNormalInput.normalWS);
 	#endif
 
-	// World Position
 	output.worldPos.xyz = positionWS;
 
-	// Computes fog factor
 	#if defined(TCP2_HYBRID_URP)
 		output.worldPos.w = ComputeFogFactor(output.pos.z);
 	#else
 		UNITY_TRANSFER_FOG_COMBINED_WITH_WORLD_POS(output, output.pos);
 	#endif
 
-	// Lighting & Texture
 	#if defined(TCP2_OUTLINE_LIGHTING)
 		output.normal = normalize(UnityObjectToWorldNormal(input.normal));
 	#endif
@@ -1277,7 +1208,6 @@ float4 fragment_outline (Varyings_Outline input) : SV_Target
 	#endif
 
 	#if defined(TCP2_OUTLINE_TEXTURED_FRAGMENT)
-		// Manual mip map calculation so that we can apply a max value
 		float2 dx = ddx(input.texcoord0.xy);
 		float2 dy = ddy(input.texcoord0.xy);
 		float delta = max(dot(dx, dx), dot(dy, dy));
@@ -1288,7 +1218,6 @@ float4 fragment_outline (Varyings_Outline input) : SV_Target
 		half4 albedo = half4(1, 1, 1, 1);
 	#endif
 
-	// Output Color
 	half4 outlineColor = half4(1, 1, 1, 1);
 
 	#if defined(TCP2_OUTLINE_LIGHTING)
@@ -1301,10 +1230,8 @@ float4 fragment_outline (Varyings_Outline input) : SV_Target
 			#endif
 
 		#if defined(TCP2_OUTLINE_LIGHTING_INDIRECT)
-			// Indirect only
 			outlineColor = half4(0, 0, 0, 1);
 		#else
-			// Main directional light
 			#if defined(TCP2_HYBRID_URP)
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
 					float4 shadowCoord = input.shadowCoord;
@@ -1332,10 +1259,8 @@ float4 fragment_outline (Varyings_Outline input) : SV_Target
 			half ndl = dot(normalWS, lightDir);
 			half ndlWrapped = ndl * 0.5 + 0.5;
 
-			// Calculate ramp
 			half3 ramp = CalculateRamp(ndlWrapped);
 
-			// Apply attenuation
 			ramp *= atten;
 
 			#if defined(TCP2_OUTLINE_TEXTURED_FRAGMENT) && defined(TCP2_SHADOW_TEXTURE)
@@ -1343,23 +1268,19 @@ float4 fragment_outline (Varyings_Outline input) : SV_Target
 				albedo = lerp(shadowAlbedo, albedo, ramp.x);
 			#endif
 
-			// Highlight/shadow colors
 			ramp = lerp(_SColor.rgb, _HColor.rgb, ramp);
 
-			// Apply ramp
 			outlineColor.rgb *= lerp(half3(1,1,1), ramp, _DirectIntensityOutline) * lightColor;
 		#endif
 
 	#endif
 
-	// Apply albedo
 	outlineColor.rgb *= albedo.rgb;
 
 	#if defined(TCP2_OUTLINE_LIGHTING)
 
 		half occlusion = 1.0;
 
-		// Additional lights loop
 		#if defined(TCP2_HYBRID_URP) && defined(TCP2_OUTLINE_LIGHTING_ALL) && defined(_ADDITIONAL_LIGHTS)
 			uint additionalLightsCount = GetAdditionalLightsCount();
 			for (uint lightIndex = 0u; lightIndex < additionalLightsCount; ++lightIndex)
@@ -1372,16 +1293,12 @@ float4 fragment_outline (Varyings_Outline input) : SV_Target
 				half ndl = dot(normalWS, lightDir);
 				half ndlWrapped = ndl * 0.5 + 0.5;
 
-				// Calculate ramp
 				half3 ramp = CalculateRamp(ndlWrapped);
 
-				// Apply attenuation (shadowmaps & point/spot lights attenuation)
 				ramp *= atten;
 
-				// Apply highlight color only
 				ramp = lerp(half3(0,0,0), _HColor.rgb, ramp);
 
-				// Apply ramp
 				outlineColor.rgb += ramp * _DirectIntensityOutline * lightColor * albedo.rgb;
 			}
 		#endif
@@ -1389,9 +1306,7 @@ float4 fragment_outline (Varyings_Outline input) : SV_Target
 			outlineColor.rgb += input.vertexLights * albedo.rgb;
 		#endif
 
-		// Apply ambient/indirect lighting
 		#if defined(TCP2_HYBRID_URP)
-			// Sample SH fully per-pixel
 			half3 bakedGI = SampleSH(_SingleIndirectColor > 0 ? viewDirWS : normalWS);
 			half3 indirectDiffuse = bakedGI * occlusion * albedo.rgb * _IndirectIntensityOutline;
 			outlineColor.rgb += indirectDiffuse;
@@ -1406,7 +1321,6 @@ float4 fragment_outline (Varyings_Outline input) : SV_Target
 
 	outlineColor.rgba *= input.vcolor.rgba;
 
-	// Fog
 	#if defined(TCP2_HYBRID_URP)
 		outlineColor.rgb = MixFog(outlineColor.rgb, input.worldPos.w);
 	#else
