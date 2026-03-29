@@ -1,4 +1,4 @@
-# Ruby
+#Case
 
 Renk eşleştirme mekaniği üzerine kurulu, konveyör bazlı bir mobil puzzle oyunu. Oyuncu, ızgara üzerindeki renkli küpleri temizlemek için CollectableBox'ları seçip konveyöre gönderiyor. CollectableBox'lar ilerlerken kendi renkleriyle eşleşen küpleri absorbe ediyor ve grid temizlenince seviye tamamlanıyor.
 
@@ -16,7 +16,7 @@ https://github.com/user-attachments/assets/757fe0dc-bcb0-409f-b111-112fa9f62457
 - Konveyörde ilerleyen CollectableBox, önüne gelen ve kendi rengiyle eşleşen küpleri çekiyor
 - Bir CollectableBox tüm çekme kapasitesini doldurunca yok oluyor
 - Tüm renkli küpler temizlenirse seviye kazanılıyor
-- Shooter'lar konveyor boyunca farklı yönlere dönebiliyor, bu sayede grid'in farklı taraflarına bakıp küp alabiliyorlar
+- CollectableBox'lar konveyor boyunca farklı yönlere dönebiliyor, bu sayede grid'in farklı taraflarına bakıp küp alabiliyorlar
 
 ---
 
@@ -41,7 +41,7 @@ Seviyeler ayrı scene'ler değil, ScriptableObject tabanlı `LevelData` asset'le
 | ReservedSlotGridSystem | Atım hakkı bitmeden konveyordan çıkan CollectableBox'lar için bekleme alanı |
 
 ### Absorb Mekaniği
-Shooter konveyörde ilerlerken her frame raycast atıyor. Raycast bir küpe çarparsa ve renkler eşleşiyorsa küp absorbe ediliyor. Küp fiziksel olarak CollectableBox'a doğru uçuyor, animasyon tamamlandıktan sonra hem sayaç güncelleniyor hem de shake animasyonu oynuyor. Birden fazla küp aynı anda havada uçabilir ama `_pendingAbsorbs` sayacı sayesinde kapasite aşımı olmuyor.
+CollectableBoxlar konveyörde ilerlerken her frame raycast atıyor. Raycast bir küpe çarparsa ve renkler eşleşiyorsa küp absorbe ediliyor. Küp fiziksel olarak CollectableBox'a doğru uçuyor, animasyon tamamlandıktan sonra hem sayaç güncelleniyor hem de shake animasyonu oynuyor. Birden fazla küp aynı anda havada uçabilir ama `_pendingAbsorbs` sayacı sayesinde kapasite aşımı olmuyor.
 
 ### Bağımlılık Yönetimi
 `CoreInstaller` tüm sistem referanslarını `Awake`'de initialize ediyor (`DefaultExecutionOrder -100`). Event-driven iletişim için `GameEvents` kullanılıyor.
